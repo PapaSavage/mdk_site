@@ -6,5 +6,6 @@ export default defineNuxtConfig({
 	colorMode: {
 		preference: "light",
 	},
-	css: ["animate.css"],
+
+	css: ["animate.css", "@/assets/css/tailwind.css"],
 });

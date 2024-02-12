@@ -24,6 +24,7 @@
 		</UCard>
 	</UContainer> -->
 	<slot />
+	<UNotifications />
 </template>
 
 <script setup lang="ts"></script>
