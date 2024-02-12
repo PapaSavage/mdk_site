@@ -99,6 +99,7 @@ const toast = useToast();
 const handleSubmit = async (event: FormSubmitEvent<any>, state: any) => {
 	try {
 		await register(state.email, state.password);
+
 		toast.add({
 			title: "Поздравляю вы зарегистрировались в системе.",
 			callback: () => {

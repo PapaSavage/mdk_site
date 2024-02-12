@@ -29,7 +29,7 @@ export const useFirebaseAuth = () => {
 			const user = userCredential.user;
 			console.log(user);
 		} catch (error) {
-			console.log(error);
+			return false;
 		}
 	};
 

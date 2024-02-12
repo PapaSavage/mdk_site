@@ -92,7 +92,7 @@ const state = reactive({
 const { register, login } = useFirebaseAuth();
 const handleSubmit = async (event: FormSubmitEvent<any>, state: any) => {
 	try {
-		await login(state.email, state.password);
+		const error = await login(state.email, state.password);
 		toast.add({
 			title: "Поздравляю - вы авторизовались в системе.",
 			callback: () => {
