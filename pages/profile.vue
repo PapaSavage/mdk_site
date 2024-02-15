@@ -1,10 +1,9 @@
 <template>
-	<UContainer class="grid place-content-center h-screen">
-		<h1 class="text-3xl font-bold">Admin Page</h1>
+	<div class="grow grid place-content-center h-screen">
+		<h1 class="text-3xl font-bold">Profile Page</h1>
 
-		<UButton @click="logout" class="text-center">Выйти из системы</UButton>
 		<button @click="logout" class="">Выйти из системы</button>
-	</UContainer>
+	</div>
 </template>
 
 <script setup lang="ts">

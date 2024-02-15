@@ -1,6 +1,6 @@
 <template>
 	<div class="grow grid place-content-center h-screen">
-		<h1 class="text-3xl font-bold">Goods Page</h1>
+		<h1 class="text-3xl font-bold">Settings Page</h1>
 
 		<button @click="logout" class="">Выйти из системы</button>
 	</div>
