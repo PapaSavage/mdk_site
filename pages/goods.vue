@@ -8,5 +8,8 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+	layout: "admin",
+});
 const { logout } = useFirebaseAuth();
 </script>

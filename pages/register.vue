@@ -1,14 +1,4 @@
 <template>
-	<UButton
-		:icon="
-			isDark ? 'i-heroicons-moon-20-solid' : 'i-heroicons-sun-20-solid'
-		"
-		color="gray"
-		variant="ghost"
-		aria-label="Theme"
-		@click="isDark = !isDark"
-		class="absolute"
-	/>
 	<UContainer class="grid place-content-center h-screen">
 		<div class="flex-col px-6">
 			<img
@@ -17,14 +7,14 @@
 				alt=""
 			/>
 
-			<div class="sm:mx-auto sm:w-full sm:max-w-sm mt-10">
+			<div class="sm:mx-auto sm:w-full sm:max-w-sm">
 				<h2
-					class="text-center text-3xl font-bold leading-9 tracking-tight"
+					class="my-3 text-center text-3xl font-bold leading-9 tracking-tight"
 				>
 					Зарегистрируйте свой личный аккаунт
 				</h2>
 			</div>
-			<div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm mb-10">
+			<div class="sm:mx-auto sm:w-full sm:max-w-sm mb-10">
 				<UForm
 					:schema="schema"
 					:state="state"
@@ -50,28 +40,23 @@
 						/>
 					</UFormGroup>
 
-					<UButton
-						type="submit"
-						color="black"
-						size="md"
-						variant="solid"
-						:ui="{
-							rounded: 'rounded-xl',
-						}"
-						block
-					>
-						Зарегистрироваться
-					</UButton>
+					<div class="flex flex-row">
+						<button
+							class="text-white active:bg-pale-sky-900 hover:bg-pale-sky-800 bg-pale-sky-900 my-auto shadow-lg dark:shadow-neutral-700/50 grow text-black-700 font-semibold h-9 border-2 border-pale-sky-900 dark:border-neutral-100 hover:dark:bg-neutral-200 dark:bg-neutral-50 dark:text-black active:dark:bg-neutral-50 rounded-lg"
+						>
+							Зарегистрироваться
+						</button>
+					</div>
 				</UForm>
 				<div class="mt-4 flex flex-row">
 					<div class="font-semibold my-auto">
-						<a href="">Уже есть аккаунт?</a>
+						<NuxtLink href="login">Уже есть аккаунт?</NuxtLink>
 					</div>
-					<button
-						class="bg-transparent grow hover:bg-mountain-500 text-black-700 font-bold hover:font-medium hover:text-white h-9 border-4 border-mountain-500 hover:border-transparent rounded-lg animate__animated hovanimate__swing ml-3"
+					<NuxtLink
+						to="login"
+						class="text-center bg-transparent grow hover:bg-mountain-500 text-black-700 font-bold hover:font-medium hover:text-white p-px border-4 border-mountain-500 hover:border-transparent rounded-lg ml-3"
+						>Войти</NuxtLink
 					>
-						Войти
-					</button>
 				</div>
 			</div>
 		</div></UContainer
@@ -81,6 +66,10 @@
 <script setup lang="ts">
 import type { FormError, FormSubmitEvent } from "#ui/types";
 import { z } from "zod";
+
+definePageMeta({
+	middleware: "auth",
+});
 
 type Schema = z.output<typeof schema>;
 const { register } = useFirebaseAuth();
@@ -95,29 +84,11 @@ const state = reactive({
 	password: undefined,
 });
 
-const toast = useToast();
 const handleSubmit = async (event: FormSubmitEvent<any>, state: any) => {
 	try {
 		await register(state.email, state.password);
-
-		toast.add({
-			title: "Поздравляю вы зарегистрировались в системе.",
-			callback: () => {
-				navigateTo("/login");
-			},
-		});
 	} catch (error) {
 		console.log(error);
 	}
 };
-
-const colorMode = useColorMode();
-const isDark = computed({
-	get() {
-		return colorMode.value === "dark";
-	},
-	set() {
-		colorMode.preference = colorMode.value === "dark" ? "light" : "dark";
-	},
-});
 </script>

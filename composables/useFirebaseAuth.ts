@@ -3,8 +3,10 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 } from "firebase/auth";
+import { string } from "zod";
 export const useFirebaseAuth = () => {
 	const { $auth } = useNuxtApp();
+	const toast = useToast();
 	const register = async (email: string, password: string) => {
 		try {
 			const userCredential = await createUserWithEmailAndPassword(
@@ -12,9 +14,24 @@ export const useFirebaseAuth = () => {
 				email,
 				password
 			);
-			const user = userCredential.user;
+			var user = userCredential.user;
 			console.log(user);
+			toast.add({
+				title: "Поздравляю вы зарегистрировались в системе.",
+				timeout: 1000,
+				callback: () => {
+					navigateTo("/login");
+				},
+			});
 		} catch (error) {
+			if (String(error).includes("auth/email-already-in-use")) {
+				toast.add({
+					title: "Такой email уже используется.",
+					timeout: 2000,
+					color: "flamingo",
+					ui: { background: "bg-white dark:bg-neutral-900" },
+				});
+			}
 			console.log(error);
 		}
 	};
@@ -28,15 +45,37 @@ export const useFirebaseAuth = () => {
 			);
 			const user = userCredential.user;
 			console.log(user);
+			toast.add({
+				title: "Поздравляю - вы авторизовались в системе.",
+				timeout: 1000,
+				callback: () => {
+					navigateTo("/home");
+				},
+				ui: { background: "bg-white dark:bg-neutral-900" },
+			});
 		} catch (error) {
-			return false;
+			toast.add({
+				title: "Неверная почта или пароль.",
+				timeout: 2000,
+				color: "flamingo",
+				ui: { background: "bg-white dark:bg-neutral-900" },
+			});
+			console.log(error);
 		}
 	};
 
 	const logout = async () => {
 		try {
 			await $auth.signOut();
-			await navigateTo("/login");
+			toast.add({
+				title: "Вы вышли из системы.",
+				timeout: 1000,
+				color: "orange",
+				callback: () => {
+					navigateTo("/login");
+				},
+				ui: { background: "bg-white dark:bg-neutral-900" },
+			});
 		} catch (error) {
 			console.log(error);
 		}
