@@ -12,7 +12,7 @@
 			variant="ghost"
 			aria-label="Theme"
 			@click="isDark = !isDark"
-			class="absolute bottom-0 right-0"
+			class="absolute top-0 right-0"
 	/></ClientOnly>
 	<UNotifications />
 </template>

@@ -27,6 +27,9 @@
 							placeholder="example@domain.com"
 							color="pale-sky"
 							class="font-bold"
+                            :ui="{
+                                placeholder: 'placeholder-pale-sky-400 dark:placeholder-pale-sky-500',
+                            }"
 						/>
 					</UFormGroup>
 

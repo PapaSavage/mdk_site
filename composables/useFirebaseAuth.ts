@@ -2,6 +2,8 @@ import {
 	createUserWithEmailAndPassword,
 	signInWithEmailAndPassword,
 	signOut,
+	getAuth,
+	getPersistence,
 } from "firebase/auth";
 import { string } from "zod";
 export const useFirebaseAuth = () => {
@@ -70,7 +72,7 @@ export const useFirebaseAuth = () => {
 			toast.add({
 				title: "Вы вышли из системы.",
 				timeout: 1000,
-				color: "orange",
+				color: "flamingo",
 				callback: () => {
 					navigateTo("/login");
 				},
