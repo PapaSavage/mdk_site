@@ -6,28 +6,47 @@
 			:links="links"
 		/>
 	</div>
+	<UButton label="Open" @click="isOpen = true" />
+
+	<USlideover
+		side="left"
+		:ui="{
+			base: 'relative flex-1 flex flex-col w-full focus:outline-none',
+			width: 'max-w-48',
+		}"
+		v-model="isOpen"
+		:transition="true"
+	>
+		<div class=""></div>
+	</USlideover>
 </template>
 <script setup lang="ts">
+const isOpen = ref(false);
 const links = [
 	{
-		label: "Profile",
+		label: "Профиль",
 		avatar: {
 			src: "https://avatars.githubusercontent.com/u/739984?v=4",
 		},
 		badge: 100,
 	},
 	{
-		label: "Home",
+		label: "Главная",
 		icon: "i-heroicons-home",
 		to: "/home",
 	},
 	{
-		label: "Goods",
+		label: "Настройки",
 		icon: "i-heroicons-chart-bar",
 		to: `/goods`,
 	},
 	{
-		label: "Orders",
+		label: "Dashboard",
+		icon: "i-heroicons-command-line",
+		to: "/orders",
+	},
+	{
+		label: "Каталог товаров",
 		icon: "i-heroicons-command-line",
 		to: "/orders",
 	},
