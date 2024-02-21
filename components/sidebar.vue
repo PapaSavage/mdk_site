@@ -11,39 +11,6 @@
 			</button>
 		</div>
 	</div>
-	<UButton
-		:icon="'i-heroicons-bars-3-16-solid'"
-		color="gray"
-		variant="ghost"
-		aria-label="Theme"
-		@click="isOpen = true"
-		class="absolute sm:hidden top-0 left-0"
-	/>
-	<USlideover
-		v-model="isOpen"
-		side="left"
-		:overlay="false"
-		:ui="{
-			background: 'bg-pale-sky-50 dark:bg-neutral-900',
-
-			width: 'max-w-48',
-			rounded: 'rounded-lg',
-		}"
-	>
-		<UVerticalNavigation
-			class="px-5 py-5"
-			:ui="{
-				base: 'group relative flex items-center gap-1.5 focus:outline-none focus-visible:outline-none dark:focus-visible:outline-none focus-visible:before:ring-inset focus-visible:before:ring-1 focus-visible:before:ring-pale-sky-500 dark:focus-visible:before:ring-bg-pale-sky--400 before:absolute before:inset-px before:rounded-md disabled:cursor-not-allowed disabled:opacity-75',
-				active: 'text-pale-sky-900 dark:text-white before:bg-pale-sky-100 dark:before:bg-pale-sky-800',
-				inactive:
-					'text-pale-sky-500 dark:text-pale-sky-400 hover:text-pale-sky-800    dark:hover:text-white hover:before:bg-pale-sky-50 dark:hover:before:bg-pale-sky-800/50',
-				ring: '',
-			}"
-			:links="links"
-		/>
-	</div>
-	<UButton label="Open" @click="isOpen = true" />
-
 	<USlideover
 		side="left"
 		:ui="{
@@ -55,12 +22,20 @@
 	>
 		<div class=""></div>
 	</USlideover>
+	<UButton
+		:icon="'i-heroicons-bars-3-16-solid'"
+		color="gray"
+		variant="ghost"
+		aria-label="Theme"
+		@click="isOpen = true"
+		class="absolute sm:hidden top-0 left-0"
+	/>
+	<UButton label="Open" @click="isOpen = true" />
 </template>
 <script setup lang="ts">
 const isOpen = ref(false);
 const links = [
 	{
-		label: "Профиль",
 		label: "Профиль",
 		avatar: {
 			src: "https://avatars.githubusercontent.com/u/739984?v=4",
@@ -95,7 +70,6 @@ const links = [
 ];
 
 const { logout } = useFirebaseAuth();
-const isOpen = ref(false);
 function closeOpen() {
 	isOpen.value = false;
 }
