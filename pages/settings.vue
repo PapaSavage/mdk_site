@@ -10,5 +10,7 @@
 definePageMeta({
 	layout: "admin",
 });
+useHead({ title: "Settings" });
+
 const { logout } = useFirebaseAuth();
 </script>

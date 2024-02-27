@@ -70,6 +70,7 @@ import { z } from "zod";
 definePageMeta({
 	middleware: "auth",
 });
+useHead({ title: "Registration" });
 
 type Schema = z.output<typeof schema>;
 const { register } = useFirebaseAuth();

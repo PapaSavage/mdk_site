@@ -10,5 +10,6 @@
 definePageMeta({
 	layout: "admin",
 });
+useHead({ title: "Canban" });
 const { logout } = useFirebaseAuth();
 </script>

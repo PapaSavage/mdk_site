@@ -1,4 +1,4 @@
-<template ">
+<template>
 	<UContainer class="grid place-content-center h-screen">
 		<div class="flex-col px-6">
 			<img
@@ -27,9 +27,10 @@
 							placeholder="example@domain.com"
 							color="pale-sky"
 							class="font-bold"
-                            :ui="{
-                                placeholder: 'placeholder-pale-sky-400 dark:placeholder-pale-sky-500',
-                            }"
+							:ui="{
+								placeholder:
+									'placeholder-pale-sky-400 dark:placeholder-pale-sky-500',
+							}"
 						/>
 					</UFormGroup>
 
@@ -73,6 +74,8 @@ import { z } from "zod";
 definePageMeta({
 	middleware: "auth",
 });
+
+useHead({ title: "Login" });
 
 const schema = z.object({
 	email: z.string().email("Invalid email"),
