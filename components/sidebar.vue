@@ -84,19 +84,19 @@ const links = [
 	{
 		label: "Настройки",
 		icon: "i-heroicons-chart-bar",
-		to: `/goods`,
+		to: `/settings`,
 		click: closeOpen,
 	},
 	{
-		label: "Dashboard",
-		icon: "i-heroicons-command-line",
-		to: "/canban",
+		label: "Заказы",
+		icon: "i-heroicons-shopping-bag-solid",
+		to: "/orders",
 		click: closeOpen,
 	},
 	{
 		label: "Каталог товаров",
-		icon: "i-heroicons-command-line",
-		to: "/orders",
+		icon: "i-heroicons-clipboard-document-list",
+		to: "/goods",
 		click: closeOpen,
 	},
 ];
