@@ -3,7 +3,6 @@ import {
 	signInWithEmailAndPassword,
 	signOut,
 	getAuth,
-	getPersistence,
 } from "firebase/auth";
 import { string } from "zod";
 export const useFirebaseAuth = () => {
@@ -18,13 +17,15 @@ export const useFirebaseAuth = () => {
 			);
 			var user = userCredential.user;
 			console.log(user);
-			toast.add({
-				title: "Поздравляю вы зарегистрировались в системе.",
-				timeout: 1000,
-				callback: () => {
-					navigateTo("/login");
-				},
-			});
+			if (userCredential) {
+				toast.add({
+					title: "Поздравляю вы зарегистрировались в системе.",
+					timeout: 1000,
+					callback: () => {
+						navigateTo("/login");
+					},
+				});
+			}
 		} catch (error) {
 			if (String(error).includes("auth/email-already-in-use")) {
 				toast.add({
