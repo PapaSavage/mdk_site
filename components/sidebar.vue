@@ -84,7 +84,7 @@ const links = [
 	{
 		label: "Настройки",
 		icon: "i-heroicons-chart-bar",
-		to: `/goods`,
+		to: `/settings`,
 		click: closeOpen,
 	},
 	{
