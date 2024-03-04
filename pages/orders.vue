@@ -30,6 +30,7 @@
 <script setup lang="ts">
 definePageMeta({
 	layout: "admin",
+    middleware: "auth",
 });
 useHead({ title: "Orders" });
 
@@ -46,5 +47,5 @@ const tasks = [
 	{ id: 4, title: "Task 4", status: "cancelled" },
 ];
 
-const { logout } = useFirebaseAuth();
+const { logout } = actions();
 </script>

@@ -72,8 +72,8 @@ import type { FormError, FormSubmitEvent } from "#ui/types";
 import { z } from "zod";
 
 definePageMeta({
-	middleware: "auth",
-});
+    middleware: "already-logged-in",
+})
 
 useHead({ title: "Login" });
 
@@ -82,14 +82,13 @@ const schema = z.object({
 	password: z.string().min(6, "Must be at least 6 characters"),
 });
 
-type Schema = z.output<typeof schema>;
-
 const state = reactive({
 	email: undefined,
 	password: undefined,
 });
 
-const { register, login } = useFirebaseAuth();
+const {login} = actions();
+
 const handleSubmit = async (event: FormSubmitEvent<any>, state: any) => {
 	try {
 		await login(state.email, state.password);

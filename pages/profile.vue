@@ -7,11 +7,13 @@
 </template>
 
 <script setup lang="ts">
+
 definePageMeta({
 	layout: "admin",
+    middleware: "auth",
 });
 
 useHead({ title: "Profile" });
 
-const { logout } = useFirebaseAuth();
+const { logout } = actions();
 </script>

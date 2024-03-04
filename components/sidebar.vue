@@ -101,7 +101,7 @@ const links = [
 	},
 ];
 
-const { logout } = useFirebaseAuth();
+const { logout } = actions();
 function closeOpen() {
 	isOpen.value = false;
 }

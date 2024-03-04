@@ -68,12 +68,12 @@ import type { FormError, FormSubmitEvent } from "#ui/types";
 import { z } from "zod";
 
 definePageMeta({
-	middleware: "auth",
-});
+    middleware: "already-logged-in",
+})
+
 useHead({ title: "Registration" });
 
 type Schema = z.output<typeof schema>;
-const { register } = useFirebaseAuth();
 
 const schema = z.object({
 	email: z.string().email("Invalid email"),
@@ -85,8 +85,11 @@ const state = reactive({
 	password: undefined,
 });
 
+const {register} = actions();
+
 const handleSubmit = async (event: FormSubmitEvent<any>, state: any) => {
-	try {
+
+    try {
 		await register(state.email, state.password);
 	} catch (error) {
 		console.log(error);
