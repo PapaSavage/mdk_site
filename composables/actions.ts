@@ -8,7 +8,7 @@ import {
 export const actions = () => {
     const auth = useFirebaseAuth();
     const toast = useToast();
-    const register = async (email: string, password: string) => {
+    const register = async (email: string, password: string, nickname: string) => {
 
         try {
             toast.add({
@@ -27,12 +27,13 @@ export const actions = () => {
                 },
                 ui: { background: "bg-white dark:bg-neutral-900" },
             });
-            const userCredential = await createUserWithEmailAndPassword(
+            const { user } = await createUserWithEmailAndPassword(
                 auth!,
                 email,
                 password
             );
-            if (userCredential) {
+            if (user) {
+                await updateProfile(user, { displayName: nickname });
                 toast.add({
                     title: "Поздравляю вы зарегистрировались в системе.",
                     timeout: 1000,
