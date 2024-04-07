@@ -61,12 +61,12 @@ const products = ref<Product>({
 const loading = ref(true);
 
 API.get('products/')
-    .then(function (response) {
+    .then(function (response: any) {
         products.value = response.data;
         console.log(products);
         loading.value = false;
     })
-    .catch(function (error) {
+    .catch(function (error: any) {
         console.log(error);
     });
 
