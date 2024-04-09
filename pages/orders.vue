@@ -12,19 +12,78 @@
 					:key="orderIndex"
 					class="p-2 rounded shadow-sm border-gray-100 border-2"
 				>
-					<h3 class="text-sm mb-3 text-gray-700">№{{ order.id }} {{ order.title }}</h3>
+				<a href="" class="animate__animated animate__fadeIn" @click.prevent="openModal(order)">
+					<div class="flex justify-between">
+					<h3 class="text-sm mb-3 text-gray-700">Заказ</h3>
 					<p class="bg-red-100 text-xs w-max p-1 rounded mr-2 text-gray-700">
-						{{ order.status }}
+						{{order.status}}
 					</p>
+					</div>
 					<div class="flex flex-row items-center mt-2">
 						<div class="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-						<a href="#" class="text-xs text-gray-500">ляля</a>
+						<a href="#" class="text-xs text-gray-500">{{ order.customer_name }}</a>
 					</div>
-					<p class="text-xs text-gray-500 mt-2">ляля</p>
-				</div>
+					<div class="flex flex-row items-center mt-2">
+						<div class="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
+						<p class="text-xs text-gray-500">{{ order.customer_phone }}</p>
+					</div>
+					<p class="text-xs text-gray-500 mt-2" v-html="order.description"></p>
+				</a>
+			</div>
 			</div>
 		</div>
+		<div v-if="selectedOrder" class="fixed z-10 inset-0 overflow-y-auto" @click.self="closeModal">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="sm:flex sm:items-start">
+                            <div class="mt-3 sm:mt-0 sm:w-1/2">
+                                бебебе
+                            </div>
+                            <div class="mt-3 sm:mt-0 sm:ml-6 sm:w-1/2">
+                                <div class="mb-4">
+                                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                                    <input type="text" id="title" 
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
+                                    <input type="text" id="slug" 
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                                </div>
+                                <div class="mb-4">
+                                    <label for="category"
+                                        class="block text-sm font-medium text-gray-700">Category</label>
+                                </div>
+                                <div class="mb-4">
+                                    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                                    <input type="number" id="price"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="button" 
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm">
+                            Save
+                        </button>
+                        <button type="button" @click="closeModal"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 	</div>
+	
 </template>
 
 <script setup lang="ts">
@@ -44,22 +103,27 @@ const columns = [
 	{ title: "Готово", status: "done" },
 	{ title: "Отменено", status: "cancelled" },
 ];
-const tasks = [
-	{ id: 1, title: "Task 1", status: "new" },
-	{ id: 2, title: "Task 2", status: "in_progress" },
-	{ id: 3, title: "Task 3", status: "done" },
-	{ id: 4, title: "Task 4", status: "cancelled" },
-	{ id: 5, title: "Task 5", status: "cancelled" },
-];
 
 interface Order {
     count: number;
     results: {
         id: string;
-        name: string;
-        status: number;
+        customer_name: string;
+		customer_phone: string;
+        status: string;
+		description: string;
     }[];
 }
+
+interface Order_modal {
+
+        id: string;
+        customer_name: string;
+		customer_phone: string;
+        status: string;
+		description: string;
+    }
+
 
 const orders = ref<Order>({
     count: 0,
@@ -79,8 +143,17 @@ API.get('orders/')
     });
 
 
-	const getOrdersByStatus = (status) => {
-    return tasks.filter(task => task.status === status);
+	const getOrdersByStatus = (status: string) => {
+    return orders.value.results.filter(order => order.status === status);
+}
+const selectedOrder = ref<Order_modal | null>(null);
+
+function openModal(product: Order_modal) {
+    selectedOrder.value = { ...orders };
+}
+
+function closeModal() {
+    selectedOrder.value = null;
 }
 	
 const { logout } = actions();
