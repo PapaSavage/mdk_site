@@ -99,6 +99,7 @@ export const actions = () => {
 
     const logout = async () => {
         try {
+            await auth!.signOut();
             toast.add({
                 title: "Вы вышли из системы.",
                 timeout: 1000,
@@ -108,7 +109,6 @@ export const actions = () => {
                 },
                 ui: { background: "bg-white dark:bg-neutral-900" },
             });
-            await auth!.signOut();
         } catch (error) {
             console.log(error);
         }
