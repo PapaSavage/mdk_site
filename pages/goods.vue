@@ -11,10 +11,16 @@
                     :class="{ 'bg-neutral-300 dark:bg-pale-sky-600': category.id === selectedCategory }">
                     {{ category.title }}
                 </button>
+                <button @click="openAddCategoryModal"
+                    class="text-center bg-transparent hover:bg-pale-sky-400 my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-neutral-800 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-2 dark:active:bg-pale-sky-400 active:bg-pale-sky-500">
+                    +
+                </button>
+
             </div>
             <ul>
                 <div class=" mt-6 grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-                    <div v-for="product in filteredProducts" :key="product.id" class="group relative">
+                    <div v-if="filteredProducts.length !== 0" v-for="product in filteredProducts" :key="product.id"
+                        class="group relative">
                         <a href="" class="animate__animated animate__fadeIn" @click.prevent="openModal(product)">
                             <div
                                 class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
@@ -31,6 +37,7 @@
                             </div>
                         </a>
                     </div>
+                    <div v-else>Нет данных</div>
                 </div>
             </ul>
             <div class="fixed bottom-4 right-4">
@@ -41,8 +48,9 @@
             </div>
         </div>
 
-        <div v-if="selectedProduct" class="fixed z-10 inset-0 overflow-y-auto" @click.self="closeModal">
-            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+        <div v-if="selectedProduct" class="fixed z-10 inset-0 overflow-y-auto">
+            <div
+                class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0 animate__animated animate__fadeIn">
                 <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                     <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
                 </div>
@@ -90,11 +98,11 @@
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                         <button type="button" @click="saveModalChanges"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm">
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm ">
                             Save
                         </button>
                         <button type="button" @click="closeModal"
-                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            class="my-3 md:my-0 lg:my-0 xl:my-0 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancel
                         </button>
                         <button type="button" @click="deleteproduct"
@@ -106,7 +114,7 @@
             </div>
         </div>
 
-        <div v-if="addProductModalOpen" class="fixed z-10 inset-0 overflow-y-auto" @click.self="closeModal">
+        <div v-if="addProductModalOpen" class="fixed z-10 inset-0 overflow-y-auto animate__animated animate__fadeIn">
             <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
                 <div class="fixed inset-0 transition-opacity" aria-hidden="true">
                     <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
@@ -167,6 +175,45 @@
             </div>
         </div>
 
+        <div v-if="addCategoryModalOpen" class="fixed z-10 inset-0 overflow-y-auto animate__animated animate__fadeIn">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="">
+                            <div class="mt-3">
+                                <div class="mb-4">
+                                    <label for="title" class="block text-sm font-medium text-gray-700">Название
+                                        категории</label>
+                                    <input type="text" id="title" v-model="newCategory.title"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="title" class="block text-sm font-medium text-gray-700">slug</label>
+                                    <input type="text" id="title" v-model="newCategory.slug"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="button" @click="saveNewCategory"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm">
+                            Add
+                        </button>
+                        <button type="button" @click="closeAddCategoryModal"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 </template>
@@ -187,6 +234,7 @@ const selectedCategory = ref('');
 const loading = ref(true);
 const filteredProducts = ref<Product['results']>([]);
 const addProductModalOpen = ref(false);
+const addCategoryModalOpen = ref(false);
 const selectedProduct = ref<Product_modal | null>(null);
 
 const toast = useToast();
@@ -207,6 +255,10 @@ interface new_product {
     price: number;
     category: string;
 }
+interface new_category {
+    title: string;
+    slug: string;
+}
 
 interface Product {
     count: number;
@@ -225,6 +277,11 @@ const newProduct = ref<new_product>({
     slug: '',
     price: 0,
     category: ''
+});
+
+const newCategory = ref<new_category>({
+    title: '',
+    slug: '',
 });
 
 interface Category {
@@ -304,6 +361,7 @@ function get_data() {
         })
         .catch(function (error: any) {
             console.log(error);
+            loading.value = true;
         });
 }
 
@@ -341,6 +399,10 @@ const saveNewProduct = () => {
     addProduct(newProduct.value);
 };
 
+const saveNewCategory = () => {
+    addCategory(newCategory.value);
+};
+
 const addProduct = async (newProduct: new_product) => {
     console.log(newProduct);
     await API.post('products/', newProduct).then(
@@ -366,6 +428,33 @@ const addProduct = async (newProduct: new_product) => {
             ui: { background: "bg-white dark:bg-neutral-900" },
         });
         console.error('Error adding product:', error);
+    });
+};
+const addCategory = async (newCategory: new_category) => {
+    console.log(newCategory);
+    await API.post('categories/', newCategory).then(
+        (response) => {
+            console.log('Category added:', response.data);
+            toast.add({
+                title: "Категория успешно добавлена.",
+                timeout: 1000,
+                callback: () => {
+                    get_data();
+                },
+            });
+            closeAddCategoryModal();
+        }
+    ).catch((error) => {
+        toast.add({
+            title: "Произошла ошибка. Категория не была добавлена.",
+            timeout: 1000,
+            callback: () => {
+                get_data();
+            },
+            color: "flamingo",
+            ui: { background: "bg-white dark:bg-neutral-900" },
+        });
+        console.error('Error adding category:', error);
     });
 };
 
@@ -427,12 +516,31 @@ const saveModalChanges = () => {
     }
 };
 
+function openAddCategoryModal() {
+    addCategoryModalOpen.value = true;
+}
+
+function closeAddCategoryModal() {
+    addCategoryModalOpen.value = false;
+    newCategory.value = {
+        title: '',
+        slug: '',
+    };
+
+}
+
 function openAddProductModal() {
     addProductModalOpen.value = true;
 }
 
 function closeAddProductModal() {
     addProductModalOpen.value = false;
+    newProduct.value = {
+        title: '',
+        slug: '',
+        price: 0,
+        category: '',
+    };
 }
 
 const { logout } = actions();

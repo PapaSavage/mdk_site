@@ -5,9 +5,15 @@ import {
     signOut,
     getAuth,
 } from "firebase/auth";
+import { doc, setDoc, addDoc, collection, serverTimestamp } from "firebase/firestore";
+
+
+
 export const actions = () => {
     const auth = useFirebaseAuth();
     const toast = useToast();
+    const db = useFirestore();
+
     const register = async (email: string, password: string, nickname: string) => {
 
         try {
@@ -33,6 +39,14 @@ export const actions = () => {
                 password
             );
             if (user) {
+
+                const dataObj = {
+                    uid: user.uid,
+                    email: email,
+                    nickname: nickname,
+                    bot_token: "",
+                };
+                const docRef = await setDoc(doc(db, 'users', email), dataObj)
                 await updateProfile(user, { displayName: nickname });
                 toast.add({
                     title: "Поздравляю вы зарегистрировались в системе.",

@@ -3,7 +3,7 @@
 
         <div class="flex flex-col items-center">
 
-            <img class="rounded-full" src="https://avatars.githubusercontent.com/u/739984?v=4" alt="">
+            <!-- <img class="rounded-full" src="https://avatars.githubusercontent.com/u/739984?v=4" alt=""> -->
             <div class="text-3xl">{{ user?.displayName }}</div>
         </div>
 
@@ -38,6 +38,8 @@
 <script setup lang="ts">
 
 const user = useCurrentUser();
+
+console.log(user);
 
 
 
