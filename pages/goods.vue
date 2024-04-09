@@ -12,8 +12,12 @@
                     {{ category.title }}
                 </button>
                 <button @click="openAddCategoryModal"
-                    class="text-center bg-transparent hover:bg-pale-sky-400 my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-neutral-800 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-2 dark:active:bg-pale-sky-400 active:bg-pale-sky-500">
+                    class="text-center bg-mountain-500 hover:bg-mountain-700  my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-mountain-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-mountain-400 active:bg-mountain-300">
                     +
+                </button>
+                <button @click="openDeleteCategoryModal"
+                    class="text-center bg-flamingo-500 hover:bg-flamingo-700 my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-flamingo-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-flamingo-400 active:bg-flamingo-300">
+                    X
                 </button>
 
             </div>
@@ -37,7 +41,7 @@
                             </div>
                         </a>
                     </div>
-                    <div v-else>Нет данных</div>
+                    <div class="animate__animated animate__fadeIn" v-else>Нет данных</div>
                 </div>
             </ul>
             <div class="fixed bottom-4 right-4">
@@ -213,6 +217,44 @@
                 </div>
             </div>
         </div>
+        <div v-if="deleteCategoryModalOpen"
+            class="fixed z-10 inset-0 overflow-y-auto animate__animated animate__fadeIn">
+            <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+                <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+                    <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
+                </div>
+                <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+                <div
+                    class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <div class="">
+                            <div class="mt-3">
+                                <div class="mb-4">
+                                    <label for="category"
+                                        class="block text-sm font-medium text-gray-700">Категория</label>
+                                    <select id="category" v-model="category_del_modal.id"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        <option disabled value="">Select a category</option>
+                                        <option v-for="category in categories.results" :key="category.id"
+                                            :value="category.id">{{ category.title }}</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="button" @click="deleteCategory"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-flamingo-600 text-base font-medium text-white hover:bg-flamingo-700 sm:ml-3 sm:w-auto sm:text-sm">
+                            Delete
+                        </button>
+                        <button type="button" @click="closeDeteleCategoryModal"
+                            class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
     </div>
 
@@ -235,6 +277,7 @@ const loading = ref(true);
 const filteredProducts = ref<Product['results']>([]);
 const addProductModalOpen = ref(false);
 const addCategoryModalOpen = ref(false);
+const deleteCategoryModalOpen = ref(false);
 const selectedProduct = ref<Product_modal | null>(null);
 
 const toast = useToast();
@@ -258,6 +301,10 @@ interface new_product {
 interface new_category {
     title: string;
     slug: string;
+}
+
+interface category_del_modal {
+    id: string;
 }
 
 interface Product {
@@ -302,6 +349,10 @@ const categories = ref<Category>({
     results: []
 });
 
+const category_del_modal = ref<category_del_modal>({
+    id: ''
+})
+
 
 get_data();
 
@@ -315,7 +366,6 @@ const handleImageUpload = async (event: Event) => {
         return;
     }
 
-    console.log(file);
 
     try {
         const formData = new FormData();
@@ -326,7 +376,6 @@ const handleImageUpload = async (event: Event) => {
             headers: { 'content-type': 'multipart/form-data' }
         }
 
-        // Отправляем POST-запрос для загрузки файла на сервер
         API.post('images/', formData, config)
             .then(function (response) {
                 console.log(response);
@@ -347,7 +396,6 @@ function get_data() {
     ])
         .then(function ([categoriesResponse, productsResponse]: any) {
             categories.value = categoriesResponse.data;
-            console.log(categories);
             products.value = productsResponse.data;
 
             if (categories.value.results.length > 0) {
@@ -403,11 +451,55 @@ const saveNewCategory = () => {
     addCategory(newCategory.value);
 };
 
+const deleteCategory = () => {
+    delCategory();
+};
+
+const delCategory = async () => {
+    if (category_del_modal.value.id === '') {
+        toast.add({
+            title: "Произошла ошибка. Выберите категорию.",
+            timeout: 1000,
+            callback: () => {
+                get_data();
+            },
+            color: "flamingo",
+            ui: { background: "bg-white dark:bg-neutral-900" },
+        });
+    }
+    else if (category_del_modal.value) {
+        console.log(category_del_modal.value);
+        API.delete(`categories/${category_del_modal.value.id}/`)
+            .then((response) => {
+                console.log('Category deleted:', response.data);
+                toast.add({
+                    title: "Категория будет удалена.",
+                    timeout: 1000,
+                    callback: () => {
+                        get_data();
+                    },
+                });
+                category_del_modal.value.id = '';
+                closeDeteleCategoryModal();
+            })
+            .catch((error) => {
+                toast.add({
+                    title: "Произошла ошибка. Категория не была удалена.",
+                    timeout: 1000,
+                    callback: () => {
+                        get_data();
+                    },
+                    color: "flamingo",
+                    ui: { background: "bg-white dark:bg-neutral-900" },
+                });
+                console.error('Error deleting category:', error);
+            });
+    }
+}
+
 const addProduct = async (newProduct: new_product) => {
-    console.log(newProduct);
     await API.post('products/', newProduct).then(
         (response) => {
-            console.log('Product added:', response.data);
             toast.add({
                 title: "Товар успешно добавлен.",
                 timeout: 1000,
@@ -431,10 +523,8 @@ const addProduct = async (newProduct: new_product) => {
     });
 };
 const addCategory = async (newCategory: new_category) => {
-    console.log(newCategory);
     await API.post('categories/', newCategory).then(
         (response) => {
-            console.log('Category added:', response.data);
             toast.add({
                 title: "Категория успешно добавлена.",
                 timeout: 1000,
@@ -462,7 +552,6 @@ const deleteproduct = () => {
     if (selectedProduct.value) {
         API.delete(`products/${selectedProduct.value.id}/`)
             .then((response) => {
-                console.log('Product deleted:', response.data);
                 toast.add({
                     title: "Продукт был удалён.",
                     timeout: 1000,
@@ -491,7 +580,6 @@ const saveModalChanges = () => {
     if (selectedProduct.value) {
         API.put(`products/${selectedProduct.value.id}/`, selectedProduct.value)
             .then((response) => {
-                console.log('Product updated:', response.data);
                 toast.add({
                     title: "Изменения были сохранены.",
                     timeout: 1000,
@@ -529,9 +617,18 @@ function closeAddCategoryModal() {
 
 }
 
+function openDeleteCategoryModal() {
+    deleteCategoryModalOpen.value = true;
+}
+
+function closeDeteleCategoryModal() {
+    deleteCategoryModalOpen.value = false;
+}
+
 function openAddProductModal() {
     addProductModalOpen.value = true;
 }
+
 
 function closeAddProductModal() {
     addProductModalOpen.value = false;
