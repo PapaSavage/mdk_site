@@ -9,6 +9,8 @@
         </NuxtLink>
     </UContainer>
     <div class="absolute bg-repeat h-screen her"></div>
+
+    <div>Суслов</div>
 </template>
 
 <script setup lang="ts">
