@@ -72,11 +72,7 @@
                                     <input type="text" id="title" v-model="selectedProduct.title"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
-                                <div class="mb-4">
-                                    <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
-                                    <input type="text" id="slug" v-model="selectedProduct.slug"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                                </div>
+
                                 <div class="mb-4">
                                     <label for="category"
                                         class="block text-sm font-medium text-gray-700">Category</label>
@@ -138,11 +134,6 @@
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
                                 <div class="mb-4">
-                                    <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
-                                    <input type="text" id="slug" v-model="newProduct.slug"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                                </div>
-                                <div class="mb-4">
                                     <label for="category"
                                         class="block text-sm font-medium text-gray-700">Category</label>
                                     <select id="category" v-model="newProduct.category"
@@ -196,11 +187,7 @@
                                     <input type="text" id="title" v-model="newCategory.title"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
                                 </div>
-                                <div class="mb-4">
-                                    <label for="title" class="block text-sm font-medium text-gray-700">slug</label>
-                                    <input type="text" id="title" v-model="newCategory.slug"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -286,7 +273,6 @@ const toast = useToast();
 interface Product_modal {
     id: string;
     title: string;
-    slug: string;
     price: number;
     category: string;
     images: string;
@@ -294,13 +280,11 @@ interface Product_modal {
 
 interface new_product {
     title: string;
-    slug: string;
     price: number;
     category: string;
 }
 interface new_category {
     title: string;
-    slug: string;
 }
 
 interface category_del_modal {
@@ -312,7 +296,6 @@ interface Product {
     results: {
         id: string;
         title: string;
-        slug: string;
         price: number;
         category: string;
         images: string;
@@ -321,14 +304,12 @@ interface Product {
 
 const newProduct = ref<new_product>({
     title: '',
-    slug: '',
     price: 0,
     category: ''
 });
 
 const newCategory = ref<new_category>({
     title: '',
-    slug: '',
 });
 
 interface Category {
@@ -390,27 +371,44 @@ const handleImageUpload = async (event: Event) => {
 
 
 function get_data() {
-    Promise.all([
-        API.get('categories/'),
-        API.get('products/')
-    ])
-        .then(function ([categoriesResponse, productsResponse]: any) {
-            categories.value = categoriesResponse.data;
-            products.value = productsResponse.data;
 
-            if (categories.value.results.length > 0) {
-                selectedCategory.value = categories.value.results[0].id;
-                filterProducts();
-            } else {
-                filteredProducts.value = products.value.results;
-            }
+    // import axios from 'axios';
 
-            loading.value = false;
+    // Определите базовый URL вашего API
+
+    // Выполните GET-запрос к эндпоинту /products/
+    API.get('products/')
+        .then(response => {
+            // Обработка успешного ответа
+            console.log(response.data);
         })
-        .catch(function (error: any) {
-            console.log(error);
-            loading.value = true;
+        .catch(error => {
+            // Обработка ошибки
+            console.error('Ошибка при выполнении запроса:', error);
         });
+
+
+    // Promise.all([
+    //     API.get('categories/'),
+    //     API.get('products/')
+    // ])
+    //     .then(function ([categoriesResponse, productsResponse]: any) {
+    //         categories.value = categoriesResponse.data;
+    //         products.value = productsResponse.data;
+
+    //         if (categories.value.results.length > 0) {
+    //             selectedCategory.value = categories.value.results[0].id;
+    //             filterProducts();
+    //         } else {
+    //             filteredProducts.value = products.value.results;
+    //         }
+
+    //         loading.value = false;
+    //     })
+    //     .catch(function (error: any) {
+    //         console.log(error);
+    //         loading.value = true;
+    //     });
 }
 
 
@@ -612,7 +610,6 @@ function closeAddCategoryModal() {
     addCategoryModalOpen.value = false;
     newCategory.value = {
         title: '',
-        slug: '',
     };
 
 }
@@ -634,7 +631,6 @@ function closeAddProductModal() {
     addProductModalOpen.value = false;
     newProduct.value = {
         title: '',
-        slug: '',
         price: 0,
         category: '',
     };
