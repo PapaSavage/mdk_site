@@ -377,7 +377,17 @@ function get_data() {
     // Определите базовый URL вашего API
 
     // Выполните GET-запрос к эндпоинту /products/
-    API.get('products/')
+    // API.get('products/')
+    //     .then(response => {
+    //         // Обработка успешного ответа
+    //         console.log(response.data);
+    //     })
+    //     .catch(error => {
+    //         // Обработка ошибки
+    //         console.error('Ошибка при выполнении запроса:', error);
+    //     });
+
+    API.get('categories/')
         .then(response => {
             // Обработка успешного ответа
             console.log(response.data);

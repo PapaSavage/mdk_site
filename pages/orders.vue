@@ -156,26 +156,34 @@ const orders = ref<Order>({
 });
 
 const loading = ref(true);
-
-API.get('orders/')
-    .then(function (response: any) {
-        orders.value = response.data;
-        console.log(orders);
-        loading.value = false;
-    })
-    .catch(function (error: any) {
-        console.log(error);
-    });
-
 API.get('products/')
-.then(function (response: any) {
-    products.value = response.data;
-        console.log(orders);
-        loading.value = false;
-    })
-    .catch(function (error: any) {
-        console.log(error);
-    });
+        .then(response => {
+            // Обработка успешного ответа
+            console.log(response.data);
+        })
+        .catch(error => {
+            // Обработка ошибки
+            console.error('Ошибка при выполнении запроса:', error);
+        });
+// API.get('orders/')
+//     .then(function (response: any) {
+//         orders.value = response.data;
+//         console.log(orders);
+//         loading.value = false;
+//     })
+//     .catch(function (error: any) {
+//         console.log(error);
+//     });
+
+// API.get('products/')
+// .then(function (response: any) {
+//     products.value = response.data;
+//         console.log(orders);
+//         loading.value = false;
+//     })
+//     .catch(function (error: any) {
+//         console.log(error);
+//     });
 
 const getOrdersByStatus = (status: string) => {
     return orders.value.results.filter(order => order.status === status);
