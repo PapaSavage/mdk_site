@@ -304,8 +304,8 @@ interface Product {
 
 const newProduct = ref<new_product>({
     title: '',
+    category: '',
     price: 0,
-    category: ''
 });
 
 const newCategory = ref<new_category>({
@@ -387,50 +387,50 @@ function get_data() {
     //         console.error('Ошибка при выполнении запроса:', error);
     //     });
 
-    API.get('categories/')
-        .then(response => {
-            // Обработка успешного ответа
-            console.log(response.data);
-        })
-        .catch(error => {
-            // Обработка ошибки
-            console.error('Ошибка при выполнении запроса:', error);
-        });
-
-
-    // Promise.all([
-    //     API.get('categories/'),
-    //     API.get('products/')
-    // ])
-    //     .then(function ([categoriesResponse, productsResponse]: any) {
-    //         categories.value = categoriesResponse.data;
-    //         products.value = productsResponse.data;
-
-    //         if (categories.value.results.length > 0) {
-    //             selectedCategory.value = categories.value.results[0].id;
-    //             filterProducts();
-    //         } else {
-    //             filteredProducts.value = products.value.results;
-    //         }
-
-    //         loading.value = false;
+    // API.get('categories/')
+    //     .then(response => {
+    //         // Обработка успешного ответа
+    //         console.log(response.data);
     //     })
-    //     .catch(function (error: any) {
-    //         console.log(error);
-    //         loading.value = true;
+    //     .catch(error => {
+    //         // Обработка ошибки
+    //         console.error('Ошибка при выполнении запроса:', error);
     //     });
+
+
+    Promise.all([
+        API.get('categories/'),
+        API.get('products/')
+    ])
+        .then(function ([categoriesResponse, productsResponse]: any) {
+            categories.value = categoriesResponse.data;
+            products.value = productsResponse.data;
+
+            // if (categories.value.results.length > 0) {
+            //     selectedCategory.value = categories.value.results[0].id;
+            //     // filterProducts();
+            // } else {
+            //     filteredProducts.value = products.value.results;
+            // }
+
+            loading.value = false;
+        })
+        .catch(function (error: any) {
+            console.log(error);
+            loading.value = true;
+        });
 }
 
 
-function filterProducts() {
-    if (selectedCategory.value === '') {
-        filteredProducts.value = products.value.results;
-    } else {
-        filteredProducts.value = products.value.results.filter(product =>
-            product.category.toLowerCase() === selectedCategory.value.toLowerCase()
-        );
-    }
-}
+// function filterProducts() {
+//     if (selectedCategory.value === '') {
+//         filteredProducts.value = products.value.results;
+//     } else {
+//         filteredProducts.value = products.value.results.filter(product =>
+//             product.category.toLowerCase() === selectedCategory.value.toLowerCase()
+//         );
+//     }
+// }
 
 watch(selectedCategory, (newValue) => {
     if (newValue === '') {
