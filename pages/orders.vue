@@ -1,35 +1,39 @@
 <template>
 	<div class="kanban-board">
 		<div
-			class="kanban-column"
-			v-for="(column, index) in columns"
-			:key="index"
-		>
-			<h2 class="kanban-column-title">{{ column.title }}</h2>
-			<div class="kanban-column-content">
-				<div
-					v-for="(order, orderIndex) in getOrdersByStatus(column.status)"
-					:key="orderIndex"
-					class="p-2 rounded shadow-sm border-gray-100 border-2"
-				>
-				<a href="" class="animate__animated animate__fadeIn" @click.prevent="openModal(order)">
-					<div class="flex justify-between">
-					<h3 class="text-sm mb-3 text-gray-700">Заказ</h3>
-					<p class="bg-red-100 text-xs w-max p-1 rounded mr-2 text-gray-700">
-						{{order.status}}
-					</p>
+    class="kanban-column"
+    v-for="(column, index) in columns"
+    :key="index"
+>
+    <h2 class="kanban-column-title">{{ column.title }}</h2>
+    <div class="kanban-column-content">
+        <!-- <draggable :list="getOrdersByStatus(column.status)">
+            <template #default> -->
+					<div
+						v-for="(order, orderIndex) in getOrdersByStatus(column.status)"
+						:key="orderIndex"
+						class="p-2 rounded shadow-sm border-gray-100 border-2"
+					>
+						<a href="" class="animate__animated animate__fadeIn" @click.prevent="openModal(order)">
+							<div class="flex justify-between">
+								<h3 class="text-sm mb-3 text-gray-700">Заказ</h3>
+								<p class="bg-red-100 text-xs w-max p-1 rounded mr-2 text-gray-700">
+									{{order.status}}
+								</p>
+							</div>
+							<div class="flex flex-row items-center mt-2">
+								<div class="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
+								<a href="#" class="text-xs text-gray-500">{{ order.customer_name }}</a>
+							</div>
+							<div class="flex flex-row items-center mt-2">
+								<div class="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
+								<p class="text-xs text-gray-500">{{ order.customer_phone }}</p>
+							</div>
+							<p class="text-xs text-gray-500 mt-2" v-html="order.description"></p>
+						</a>
 					</div>
-					<div class="flex flex-row items-center mt-2">
-						<div class="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-						<a href="#" class="text-xs text-gray-500">{{ order.customer_name }}</a>
-					</div>
-					<div class="flex flex-row items-center mt-2">
-						<div class="bg-gray-300 rounded-full w-4 h-4 mr-3"></div>
-						<p class="text-xs text-gray-500">{{ order.customer_phone }}</p>
-					</div>
-					<p class="text-xs text-gray-500 mt-2" v-html="order.description"></p>
-				</a>
-			</div>
+                <!-- </template>
+				</draggable> -->
 			</div>
 		</div>
 		<div v-if="selectedOrder" class="fixed z-10 inset-0 overflow-y-auto" @click.self="closeModal">
@@ -42,23 +46,26 @@
                     class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-start">
-                            <div class="mt-3 sm:mt-0 sm:w-1/2">
-                                бебебе
-                            </div>
                             <div class="mt-3 sm:mt-0 sm:ml-6 sm:w-1/2">
-                                <div class="mb-4">
-                                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
-                                    <input type="text" id="title" 
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                <div class="flex justify-between">
+                                <h3 class="text-sm mb-3 text-gray-700">Заказ №{{selectedOrder.id}}</h3>
+								<p class="bg-red-100 text-xs w-max p-1 rounded mr-2 text-gray-700">
+									{{selectedOrder.status}}
+								</p>
+                            </div>
+                                <div class="mb-4 ">
+                                    <label for="title" class="block text-sm font-medium text-gray-700">Клиент:</label>
+                                    <label for="title" class="block text-sm font-medium text-gray-700">{{selectedOrder.customer_name}}</label>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
-                                    <input type="text" id="slug" 
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                                    <label for="slug" class="block text-sm font-medium text-gray-700">Номер</label>
+                                    <label for="slug" class="block text-sm font-medium text-gray-700">{{selectedOrder.customer_phone}}</label>
+                                    <label for="slug" class="block text-sm font-medium text-gray-700">Почта</label>
+                                    <label for="slug" class="block text-sm font-medium text-gray-700">{{selectedOrder.customer_email}}</label>
                                 </div>
                                 <div class="mb-4">
                                     <label for="category"
-                                        class="block text-sm font-medium text-gray-700">Category</label>
+                                        class="block text-sm font-medium text-gray-700">Товар</label>
                                 </div>
                                 <div class="mb-4">
                                     <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
@@ -69,11 +76,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button" 
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm">
-                            Save
-                        </button>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex ">
                         <button type="button" @click="closeModal"
                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancel
@@ -90,6 +93,8 @@
 
 import { API } from '~/plugins/axios.js';
 import { ref } from 'vue';
+import draggable from 'vuedraggable';
+
 
 definePageMeta({
 	layout: "admin",
@@ -97,6 +102,7 @@ definePageMeta({
 });
 useHead({ title: "Orders" });
 
+const filteredProducts = ref<Product['results']>([]);
 const columns = [
 	{ title: "Новые", status: "new" },
 	{ title: "В процессе", status: "in_progress" },
@@ -104,14 +110,28 @@ const columns = [
 	{ title: "Отменено", status: "cancelled" },
 ];
 
+interface Product {
+    count: number;
+    results: {
+        id: string;
+        title: string;
+        slug: string;
+        price: number;
+        category: string;
+        images: string;
+    }[];
+}
+
 interface Order {
     count: number;
     results: {
         id: string;
         customer_name: string;
 		customer_phone: string;
+        customer_email: string;
         status: string;
 		description: string;
+        products:string[];
     }[];
 }
 
@@ -120,11 +140,16 @@ interface Order_modal {
         id: string;
         customer_name: string;
 		customer_phone: string;
+        customer_email: string;
         status: string;
 		description: string;
+        products:string[];
     }
 
-
+const products = ref<Product>({
+    count: 0,
+    results: []
+});
 const orders = ref<Order>({
     count: 0,
     results: []
@@ -142,15 +167,27 @@ API.get('orders/')
         console.log(error);
     });
 
+API.get('products/')
+.then(function (response: any) {
+    products.value = response.data;
+        console.log(orders);
+        loading.value = false;
+    })
+    .catch(function (error: any) {
+        console.log(error);
+    });
 
-	const getOrdersByStatus = (status: string) => {
+const getOrdersByStatus = (status: string) => {
     return orders.value.results.filter(order => order.status === status);
 }
 const selectedOrder = ref<Order_modal | null>(null);
 
-function openModal(product: Order_modal) {
-    selectedOrder.value = { ...orders };
+function openModal(order: Order_modal) {
+    selectedOrder.value = order;
+    filteredProducts.value = products.value.results.filter(product => selectedOrder.value?.products.includes(product.id));
 }
+
+
 
 function closeModal() {
     selectedOrder.value = null;
