@@ -19,7 +19,7 @@
                 background: 'bg-white dark:bg-pale-sky-900',
                 overlay: {
                     background: 'bg-pale-sky-200/75 dark:bg-pale-sky-800/75',
-                },
+                }, 
             }" v-model="isOpen" :transition="true">
         <div @click="closeOpen" class="flex flex-col justify-between h-full m-3 mx-3">
             <UVerticalNavigation class="" :ui="{
@@ -28,7 +28,7 @@
             }" :links="links" />
             <button type="submit" @click="logout"
                 class="h-9 text-white active:bg-pale-sky-900 hover:bg-pale-sky-800 bg-pale-sky-900 shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold border-2 border-pale-sky-900 dark:border-neutral-100 hover:dark:bg-neutral-200 dark:bg-neutral-50 dark:text-black active:dark:bg-neutral-50 rounded-lg">
-                Выйти
+                Выйтинахуй
             </button>
         </div>
     </USlideover>
