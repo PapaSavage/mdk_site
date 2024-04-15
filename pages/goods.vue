@@ -28,7 +28,7 @@
                         <a href="" class="animate__animated animate__fadeIn" @click.prevent="openModal(product)">
                             <div
                                 class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
-                                <img :src="product.images" class="" />
+                                <img :src="'data:image/png;base64,' + product.images" class="" />
                             </div>
                             <div class="mt-4 flex justify-between">
                                 <div>
@@ -64,7 +64,7 @@
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-center">
                             <div class="mt-3 sm:mt-0 sm:w-1/2 flex justify-center items-center">
-                                <img :src="selectedProduct.images" class="w-full" />
+                                <img :src="'data:image/png;base64,' + selectedProduct.images" class="w-full" />
                             </div>
                             <div class="mt-3 sm:mt-0 sm:ml-6 sm:w-1/2">
                                 <div class="mb-4">
@@ -380,7 +380,9 @@ function get_data() {
     // API.get('products/')
     //     .then(response => {
     //         // Обработка успешного ответа
-    //         console.log(response.data);
+    //         // console.log(response.data);
+    //         products.value = response.data;
+    //         console.log(products);
     //     })
     //     .catch(error => {
     //         // Обработка ошибки
