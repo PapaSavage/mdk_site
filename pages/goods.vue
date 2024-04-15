@@ -5,7 +5,7 @@
         </div>
         <div v-else class="">
             <div class="flex flex-wrap">
-                <button v-for="category in categories.results" :key="category.id"
+                <button v-if="categories.count > 0" v-for="category in categories.results" :key="category.id"
                     @click="selectedCategory = category.id"
                     class="text-center bg-transparent hover:bg-pale-sky-400 my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-neutral-800 rounded-lg animate__animated hovanimate__swing ml-3 mb-3"
                     :class="{ 'bg-neutral-300 dark:bg-pale-sky-600': category.id === selectedCategory }">
@@ -13,7 +13,7 @@
                 </button>
                 <button @click="openAddCategoryModal"
                     class="text-center bg-mountain-500 hover:bg-mountain-700  my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-mountain-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-mountain-400 active:bg-mountain-300">
-                    +
+                    Добавить категорию
                 </button>
                 <button @click="openDeleteCategoryModal"
                     class="text-center bg-flamingo-500 hover:bg-flamingo-700 my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-flamingo-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-flamingo-400 active:bg-flamingo-300">
@@ -258,7 +258,7 @@ definePageMeta({
 });
 useHead({ title: "Goods" });
 
-const selectedCategory = ref('');
+const selectedCategory = ref(0);
 
 const loading = ref(true);
 const filteredProducts = ref<Product['results']>([]);
@@ -271,40 +271,40 @@ const toast = useToast();
 
 
 interface Product_modal {
-    id: string;
+    id: number;
     title: string;
     price: number;
-    category: string;
+    category: number;
     images: string;
 }
 
 interface new_product {
     title: string;
     price: number;
-    category: string;
+    category: number;
 }
 interface new_category {
     title: string;
 }
 
 interface category_del_modal {
-    id: string;
+    id: number;
 }
 
 interface Product {
     count: number;
     results: {
-        id: string;
+        id: number;
         title: string;
         price: number;
-        category: string;
+        category: number;
         images: string;
     }[];
 }
 
 const newProduct = ref<new_product>({
     title: '',
-    category: '',
+    category: 0,
     price: 0,
 });
 
@@ -315,7 +315,7 @@ const newCategory = ref<new_category>({
 interface Category {
     count: number;
     results: {
-        id: string;
+        id: number;
         title: string;
     }[];
 }
@@ -331,7 +331,7 @@ const categories = ref<Category>({
 });
 
 const category_del_modal = ref<category_del_modal>({
-    id: ''
+    id: 0
 })
 
 
@@ -406,14 +406,14 @@ function get_data() {
             categories.value = categoriesResponse.data;
             products.value = productsResponse.data;
 
-            // if (categories.value.results.length > 0) {
-            //     selectedCategory.value = categories.value.results[0].id;
-            //     // filterProducts();
-            // } else {
-            //     filteredProducts.value = products.value.results;
-            // }
-
+            if (categories.value.count > 0) {
+                selectedCategory.value = categories.value.results[0].id;
+                filterProducts();
+            } else if (products.value.count > 0) {
+                filteredProducts.value = products.value.results;
+            }
             loading.value = false;
+
         })
         .catch(function (error: any) {
             console.log(error);
@@ -422,22 +422,22 @@ function get_data() {
 }
 
 
-// function filterProducts() {
-//     if (selectedCategory.value === '') {
-//         filteredProducts.value = products.value.results;
-//     } else {
-//         filteredProducts.value = products.value.results.filter(product =>
-//             product.category.toLowerCase() === selectedCategory.value.toLowerCase()
-//         );
-//     }
-// }
-
-watch(selectedCategory, (newValue) => {
-    if (newValue === '') {
+function filterProducts() {
+    if (selectedCategory.value === 0) {
         filteredProducts.value = products.value.results;
     } else {
         filteredProducts.value = products.value.results.filter(product =>
-            product.category.toLowerCase() === newValue.toLowerCase()
+            product.category === selectedCategory.value
+        );
+    }
+}
+
+watch(selectedCategory, (newValue) => {
+    if (newValue === 0) {
+        filteredProducts.value = products.value.results;
+    } else {
+        filteredProducts.value = products.value.results.filter(product =>
+            product.category === newValue
         );
     }
 });
@@ -464,7 +464,7 @@ const deleteCategory = () => {
 };
 
 const delCategory = async () => {
-    if (category_del_modal.value.id === '') {
+    if (category_del_modal.value.id === 0) {
         toast.add({
             title: "Произошла ошибка. Выберите категорию.",
             timeout: 1000,
@@ -487,7 +487,7 @@ const delCategory = async () => {
                         get_data();
                     },
                 });
-                category_del_modal.value.id = '';
+                category_del_modal.value.id = 0;
                 closeDeteleCategoryModal();
             })
             .catch((error) => {
@@ -512,9 +512,9 @@ const addProduct = async (newProduct: new_product) => {
                 title: "Товар успешно добавлен.",
                 timeout: 1000,
                 callback: () => {
-                    get_data();
                 },
             });
+            get_data();
             closeAddProductModal();
         }
     ).catch((error) => {
@@ -642,7 +642,7 @@ function closeAddProductModal() {
     newProduct.value = {
         title: '',
         price: 0,
-        category: '',
+        category: 0,
     };
 }
 
