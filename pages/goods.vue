@@ -70,14 +70,14 @@
                                 <div class="mb-4">
                                     <label for="title" class="block text-sm font-medium text-gray-700">Название</label>
                                     <input type="text" id="title" v-model="selectedProduct.title"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                 </div>
 
                                 <div class="mb-4">
                                     <label for="category"
                                         class="block text-sm font-medium text-gray-700">Категория</label>
                                     <select id="category" v-model="selectedProduct.category"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                         <option disabled value="">Select a category</option>
                                         <option v-for="category in categories.results" :key="category.id"
                                             :value="category.id">{{ category.title }}</option>
@@ -86,12 +86,13 @@
                                 <div class="mb-4">
                                     <label for="price" class="block text-sm font-medium text-gray-700">Цена</label>
                                     <input type="number" id="price" v-model.number="selectedProduct.price"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                 </div>
                                 <div class="mb-4">
                                     <label for="image"
                                         class="block text-sm font-medium text-gray-700">Изображение</label>
-                                    <input type="file" id="image" @change="handleImageUpload" class="mt-1 block w-full">
+                                    <input type="file" id="image" @change="handleImageUpload"
+                                        class="mt-1 block w-full transition-all duration-300 ease-in-out">
                                 </div>
                             </div>
                         </div>
@@ -131,7 +132,7 @@
                                 <div class="mb-4">
                                     <label for="title" class="block text-sm font-medium text-gray-700">Название</label>
                                     <input type="text" id="title" v-model="newProduct.title"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out"
                                         :class="{ 'border-red-500': !newProduct.title }">
                                     <div v-if="!newProduct.title" class="text-red-500 text-xs p-1">required</div>
                                 </div>
@@ -139,7 +140,7 @@
                                     <label for="category"
                                         class="block text-sm font-medium text-gray-700">Категория</label>
                                     <select id="category" v-model="newProduct.category"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out"
                                         :class="{ 'border-red-500': !newProduct.category }">
                                         <option disabled value="">Select a category</option>
                                         <option v-for="category in categories.results" :key="category.id"
@@ -150,7 +151,7 @@
                                 <div class="mb-4">
                                     <label for="price" class="block text-sm font-medium text-gray-700">Цена</label>
                                     <input type="number" id="price" v-model="newProduct.price"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out"
                                         :class="{ 'border-red-500': !newProduct.price }">
                                     <div v-if="!newProduct.price" class="text-red-500 text-xs p-1">required</div>
                                 </div>
@@ -193,7 +194,7 @@
                                     <label for="title" class="block text-sm font-medium text-gray-700">Название
                                         категории</label>
                                     <input type="text" id="title" v-model="newCategory.title"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out"
                                         :class="{ 'border-red-500': !newCategory.title }">
                                     <div v-if="!newCategory.title" class="text-red-500 text-xs p-1">required</div>
                                 </div>
@@ -231,7 +232,7 @@
                                     <label for="category"
                                         class="block text-sm font-medium text-gray-700">Категория</label>
                                     <select id="category" v-model="category_del_modal.id"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                         <option disabled value="">Select a category</option>
                                         <option v-for="category in categories.results" :key="category.id"
                                             :value="category.id">{{ category.title }}</option>
