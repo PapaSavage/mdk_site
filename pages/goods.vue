@@ -5,18 +5,18 @@
         </div>
         <div v-else class="">
             <div class="flex flex-wrap">
-                <button v-for="category in categories.results" :key="category.id"
+                <button v-if="categories.count > 0" v-for="category in categories.results" :key="category.id"
                     @click="selectedCategory = category.id"
                     class="text-center bg-transparent hover:bg-pale-sky-400 my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-neutral-800 rounded-lg animate__animated hovanimate__swing ml-3 mb-3"
                     :class="{ 'bg-neutral-300 dark:bg-pale-sky-600': category.id === selectedCategory }">
                     {{ category.title }}
                 </button>
                 <button @click="openAddCategoryModal"
-                    class="text-center bg-mountain-500 hover:bg-mountain-700  my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-mountain-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-mountain-400 active:bg-mountain-300">
-                    +
+                    class="text-center bg-mountain-500 hover:bg-mountain-700 text-white my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 dark:border-neutral-400 hover:dark:bg-mountain-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-mountain-400 active:bg-mountain-300">
+                    Добавить категорию
                 </button>
                 <button @click="openDeleteCategoryModal"
-                    class="text-center bg-flamingo-500 hover:bg-flamingo-700 my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-flamingo-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-flamingo-400 active:bg-flamingo-300">
+                    class="text-center bg-flamingo-500 hover:bg-flamingo-700 text-white my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 dark:border-neutral-400 hover:dark:bg-flamingo-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-flamingo-400 active:bg-flamingo-300">
                     X
                 </button>
 
@@ -28,7 +28,7 @@
                         <a href="" class="animate__animated animate__fadeIn" @click.prevent="openModal(product)">
                             <div
                                 class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
-                                <img :src="product.images" class="" />
+                                <img :src="'data:image/png;base64,' + product.images" class="" />
                             </div>
                             <div class="mt-4 flex justify-between">
                                 <div>
@@ -64,38 +64,35 @@
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-center">
                             <div class="mt-3 sm:mt-0 sm:w-1/2 flex justify-center items-center">
-                                <img :src="selectedProduct.images" class="w-full" />
+                                <img :src="'data:image/png;base64,' + selectedProduct.images" class="w-full" />
                             </div>
                             <div class="mt-3 sm:mt-0 sm:ml-6 sm:w-1/2">
                                 <div class="mb-4">
-                                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                                    <label for="title" class="block text-sm font-medium text-gray-700">Название</label>
                                     <input type="text" id="title" v-model="selectedProduct.title"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                 </div>
-                                <div class="mb-4">
-                                    <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
-                                    <input type="text" id="slug" v-model="selectedProduct.slug"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
-                                </div>
+
                                 <div class="mb-4">
                                     <label for="category"
-                                        class="block text-sm font-medium text-gray-700">Category</label>
+                                        class="block text-sm font-medium text-gray-700">Категория</label>
                                     <select id="category" v-model="selectedProduct.category"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                         <option disabled value="">Select a category</option>
                                         <option v-for="category in categories.results" :key="category.id"
                                             :value="category.id">{{ category.title }}</option>
                                     </select>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                                    <label for="price" class="block text-sm font-medium text-gray-700">Цена</label>
                                     <input type="number" id="price" v-model.number="selectedProduct.price"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                 </div>
                                 <div class="mb-4">
                                     <label for="image"
                                         class="block text-sm font-medium text-gray-700">Изображение</label>
-                                    <input type="file" id="image" @change="handleImageUpload" class="mt-1 block w-full">
+                                    <input type="file" id="image" @change="handleImageUpload"
+                                        class="mt-1 block w-full transition-all duration-300 ease-in-out">
                                 </div>
                             </div>
                         </div>
@@ -129,45 +126,48 @@
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
                         <div class="sm:flex sm:items-center">
                             <div class="mt-3 sm:mt-0 sm:w-1/2 flex justify-center items-center">
-                                <img src="" class="w-full" alt="Фото" />
+                                <img src="" class="w-full" alt="" />
                             </div>
                             <div class="mt-3 sm:mt-0 sm:ml-6 sm:w-1/2">
                                 <div class="mb-4">
-                                    <label for="title" class="block text-sm font-medium text-gray-700">Title</label>
+                                    <label for="title" class="block text-sm font-medium text-gray-700">Название</label>
                                     <input type="text" id="title" v-model="newProduct.title"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                </div>
-                                <div class="mb-4">
-                                    <label for="slug" class="block text-sm font-medium text-gray-700">Slug</label>
-                                    <input type="text" id="slug" v-model="newProduct.slug"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm" />
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out"
+                                        :class="{ 'border-red-500': !newProduct.title }">
+                                    <div v-if="!newProduct.title" class="text-red-500 text-xs p-1">required</div>
                                 </div>
                                 <div class="mb-4">
                                     <label for="category"
-                                        class="block text-sm font-medium text-gray-700">Category</label>
+                                        class="block text-sm font-medium text-gray-700">Категория</label>
                                     <select id="category" v-model="newProduct.category"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out"
+                                        :class="{ 'border-red-500': !newProduct.category }">
                                         <option disabled value="">Select a category</option>
                                         <option v-for="category in categories.results" :key="category.id"
                                             :value="category.id">{{ category.title }}</option>
                                     </select>
+                                    <div v-if="!newProduct.category" class="text-red-500 text-xs p-1">required</div>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
+                                    <label for="price" class="block text-sm font-medium text-gray-700">Цена</label>
                                     <input type="number" id="price" v-model="newProduct.price"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out"
+                                        :class="{ 'border-red-500': !newProduct.price }">
+                                    <div v-if="!newProduct.price" class="text-red-500 text-xs p-1">required</div>
                                 </div>
-                                <div class="mb-4">
+                                <div class=" mb-4">
                                     <label for="image"
                                         class="block text-sm font-medium text-gray-700">Изображение</label>
-                                    <input type="file" id="image" @change="" class="mt-1 block w-full">
+                                    <input type="file" id="image" @change="handleImageUpload" class="mt-1 block w-full">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
                         <button type="button" @click="saveNewProduct"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm">
+                            :disabled="!newProduct.title || !newProduct.category || !newProduct.price"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm"
+                            :class="{ 'opacity-50': !newProduct.title || !newProduct.category || !newProduct.price }">
                             Add
                         </button>
                         <button type="button" @click="closeAddProductModal"
@@ -194,19 +194,18 @@
                                     <label for="title" class="block text-sm font-medium text-gray-700">Название
                                         категории</label>
                                     <input type="text" id="title" v-model="newCategory.title"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out"
+                                        :class="{ 'border-red-500': !newCategory.title }">
+                                    <div v-if="!newCategory.title" class="text-red-500 text-xs p-1">required</div>
                                 </div>
-                                <div class="mb-4">
-                                    <label for="title" class="block text-sm font-medium text-gray-700">slug</label>
-                                    <input type="text" id="title" v-model="newCategory.slug"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
-                                </div>
+
                             </div>
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                        <button type="button" @click="saveNewCategory"
-                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm">
+                        <button type="button" @click="saveNewCategory" :disabled="!newCategory.title"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm"
+                            :class="{ 'opacity-50': !newCategory.title }">
                             Add
                         </button>
                         <button type="button" @click="closeAddCategoryModal"
@@ -233,7 +232,7 @@
                                     <label for="category"
                                         class="block text-sm font-medium text-gray-700">Категория</label>
                                     <select id="category" v-model="category_del_modal.id"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                         <option disabled value="">Select a category</option>
                                         <option v-for="category in categories.results" :key="category.id"
                                             :value="category.id">{{ category.title }}</option>
@@ -271,7 +270,7 @@ definePageMeta({
 });
 useHead({ title: "Goods" });
 
-const selectedCategory = ref('');
+const selectedCategory = ref(0);
 
 const loading = ref(true);
 const filteredProducts = ref<Product['results']>([]);
@@ -279,62 +278,61 @@ const addProductModalOpen = ref(false);
 const addCategoryModalOpen = ref(false);
 const deleteCategoryModalOpen = ref(false);
 const selectedProduct = ref<Product_modal | null>(null);
+const selectedFile = ref<file_modal | null>(null);
 
 const toast = useToast();
 
 
 interface Product_modal {
-    id: string;
+    id: number;
     title: string;
-    slug: string;
     price: number;
-    category: string;
+    category: number;
     images: string;
+}
+
+interface file_modal {
+    file: File;
 }
 
 interface new_product {
     title: string;
-    slug: string;
     price: number;
-    category: string;
+    category: number;
 }
 interface new_category {
     title: string;
-    slug: string;
 }
 
 interface category_del_modal {
-    id: string;
+    id: number;
 }
 
 interface Product {
     count: number;
     results: {
-        id: string;
+        id: number;
         title: string;
-        slug: string;
         price: number;
-        category: string;
+        category: number;
         images: string;
     }[];
 }
 
 const newProduct = ref<new_product>({
     title: '',
-    slug: '',
+    category: 0,
     price: 0,
-    category: ''
 });
 
 const newCategory = ref<new_category>({
     title: '',
-    slug: '',
 });
 
 interface Category {
     count: number;
     results: {
-        id: string;
+        id: number;
         title: string;
     }[];
 }
@@ -350,7 +348,7 @@ const categories = ref<Category>({
 });
 
 const category_del_modal = ref<category_del_modal>({
-    id: ''
+    id: 0
 })
 
 
@@ -365,31 +363,42 @@ const handleImageUpload = async (event: Event) => {
         console.error('Файл не выбран');
         return;
     }
-
-
-    try {
-        const formData = new FormData();
-        formData.append('file', file);
-
-        console.log(formData);
-        const config = {
-            headers: { 'content-type': 'multipart/form-data' }
-        }
-
-        API.post('images/', formData, config)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error);
-            });
-    } catch (error) {
-        console.error('Ошибка загрузки файла:', error);
+    else {
+        selectedFile.value = { file: file };
     }
 };
 
 
 function get_data() {
+
+    // import axios from 'axios';
+
+    // Определите базовый URL вашего API
+
+    // Выполните GET-запрос к эндпоинту /products/
+    // API.get('products/')
+    //     .then(response => {
+    //         // Обработка успешного ответа
+    //         // console.log(response.data);
+    //         products.value = response.data;
+    //         console.log(products);
+    //     })
+    //     .catch(error => {
+    //         // Обработка ошибки
+    //         console.error('Ошибка при выполнении запроса:', error);
+    //     });
+
+    // API.get('categories/')
+    //     .then(response => {
+    //         // Обработка успешного ответа
+    //         console.log(response.data);
+    //     })
+    //     .catch(error => {
+    //         // Обработка ошибки
+    //         console.error('Ошибка при выполнении запроса:', error);
+    //     });
+
+
     Promise.all([
         API.get('categories/'),
         API.get('products/')
@@ -398,14 +407,14 @@ function get_data() {
             categories.value = categoriesResponse.data;
             products.value = productsResponse.data;
 
-            if (categories.value.results.length > 0) {
+            if (categories.value.count > 0) {
                 selectedCategory.value = categories.value.results[0].id;
                 filterProducts();
-            } else {
+            } else if (products.value.count > 0) {
                 filteredProducts.value = products.value.results;
             }
-
             loading.value = false;
+
         })
         .catch(function (error: any) {
             console.log(error);
@@ -415,21 +424,21 @@ function get_data() {
 
 
 function filterProducts() {
-    if (selectedCategory.value === '') {
+    if (selectedCategory.value === 0) {
         filteredProducts.value = products.value.results;
     } else {
         filteredProducts.value = products.value.results.filter(product =>
-            product.category.toLowerCase() === selectedCategory.value.toLowerCase()
+            product.category === selectedCategory.value
         );
     }
 }
 
 watch(selectedCategory, (newValue) => {
-    if (newValue === '') {
+    if (newValue === 0) {
         filteredProducts.value = products.value.results;
     } else {
         filteredProducts.value = products.value.results.filter(product =>
-            product.category.toLowerCase() === newValue.toLowerCase()
+            product.category === newValue
         );
     }
 });
@@ -441,10 +450,18 @@ function openModal(product: Product_modal) {
 
 function closeModal() {
     selectedProduct.value = null;
+    selectedFile.value = null;
 }
 
 const saveNewProduct = () => {
+
+    if (!newProduct.value.title || !newProduct.value.category || !newProduct.value.price || !selectedFile.value?.file) {
+        alert('Пожалуйста, заполните все обязательные поля.');
+        return;
+    }
+
     addProduct(newProduct.value);
+    selectedFile.value = null;
 };
 
 const saveNewCategory = () => {
@@ -456,7 +473,7 @@ const deleteCategory = () => {
 };
 
 const delCategory = async () => {
-    if (category_del_modal.value.id === '') {
+    if (category_del_modal.value.id === 0) {
         toast.add({
             title: "Произошла ошибка. Выберите категорию.",
             timeout: 1000,
@@ -468,7 +485,7 @@ const delCategory = async () => {
         });
     }
     else if (category_del_modal.value) {
-        console.log(category_del_modal.value);
+        // console.log(category_del_modal.value);
         API.delete(`categories/${category_del_modal.value.id}/`)
             .then((response) => {
                 console.log('Category deleted:', response.data);
@@ -479,7 +496,7 @@ const delCategory = async () => {
                         get_data();
                     },
                 });
-                category_del_modal.value.id = '';
+                category_del_modal.value.id = 0;
                 closeDeteleCategoryModal();
             })
             .catch((error) => {
@@ -498,15 +515,28 @@ const delCategory = async () => {
 }
 
 const addProduct = async (newProduct: new_product) => {
-    await API.post('products/', newProduct).then(
+
+    const formData = new FormData();
+    formData.append('title', newProduct.title);
+    formData.append('category', newProduct.category.toString());
+    formData.append('price', newProduct.price.toString());
+    if (selectedFile.value?.file) {
+        formData.append('file', selectedFile.value.file);
+    }
+
+    await API.post('products/', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+    }).then(
         (response) => {
             toast.add({
                 title: "Товар успешно добавлен.",
                 timeout: 1000,
                 callback: () => {
-                    get_data();
                 },
             });
+            get_data();
             closeAddProductModal();
         }
     ).catch((error) => {
@@ -578,7 +608,21 @@ const deleteproduct = () => {
 
 const saveModalChanges = () => {
     if (selectedProduct.value) {
-        API.put(`products/${selectedProduct.value.id}/`, selectedProduct.value)
+        const formData = new FormData();
+        formData.append('title', selectedProduct.value.title);
+        formData.append('price', selectedProduct.value.price.toString());
+        formData.append('category', selectedProduct.value.category.toString());
+
+        if (selectedFile.value?.file) {
+            formData.append('file', selectedFile.value.file);
+        }
+
+        API.put(`products/${selectedProduct.value.id}/`, formData,
+            {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
             .then((response) => {
                 toast.add({
                     title: "Изменения были сохранены.",
@@ -612,21 +656,23 @@ function closeAddCategoryModal() {
     addCategoryModalOpen.value = false;
     newCategory.value = {
         title: '',
-        slug: '',
     };
 
 }
 
 function openDeleteCategoryModal() {
     deleteCategoryModalOpen.value = true;
+    selectedFile.value = null;
 }
 
 function closeDeteleCategoryModal() {
     deleteCategoryModalOpen.value = false;
+    selectedFile.value = null;
 }
 
 function openAddProductModal() {
     addProductModalOpen.value = true;
+    selectedFile.value = null;
 }
 
 
@@ -634,10 +680,10 @@ function closeAddProductModal() {
     addProductModalOpen.value = false;
     newProduct.value = {
         title: '',
-        slug: '',
         price: 0,
-        category: '',
+        category: 0,
     };
+    selectedFile.value = null;
 }
 
 const { logout } = actions();
