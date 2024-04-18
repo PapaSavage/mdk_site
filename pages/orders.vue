@@ -38,26 +38,26 @@
                 <div
                     class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
                     <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                        <div class="sm:flex sm:items-start">
-                            <div class="mt-3 sm:mt-0 sm:ml-6 sm:w-1/2">
+                        <div class="sm:flex sm:items-center">
+                            <div class="mt-3 sm:mt-0 sm:w-full">
                                 <div class="flex justify-between">
                                     <h3 class="text-sm mb-3 text-gray-700">Заказ №{{ selectedOrder.id }}</h3>
 
                                 </div>
-                                <div class="mb-4 ">
-                                    <span class="block text-sm font-medium text-gray-700">Клиент:</span>
-                                    <span class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_name
-                                        }}</span>
+                                <div class="mb-4">
+                                    <label for="customer_name" class="block text-sm font-medium text-gray-700">Клиент:</label>
+                                    <input type="text" id="customer_name" v-model="selectedOrder.customer_name" disabled
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                 </div>
                                 <div class="mb-4">
-                                    <span class="block text-sm font-medium text-gray-700">Номер</span>
-                                    <span class="block text-sm font-medium text-gray-700">{{
-            selectedOrder.customer_phone
-        }}</span>
-                                    <span class="block text-sm font-medium text-gray-700">Почта</span>
-                                    <span class="block text-sm font-medium text-gray-700">{{
-                selectedOrder.customer_email
-            }}</span>
+                                    <label for="customer_phone" class="block text-sm font-medium text-gray-700">Номер</label>
+                                    <input type="text" id="customer_phone" v-model="selectedOrder.customer_phone" disabled
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
+                                </div>
+                                <div class="mb-4">
+                                    <label for="customer_email" class="block text-sm font-medium text-gray-700">Почта</label>
+                                    <input type="email" id="customer_email" v-model="selectedOrder.customer_email" disabled
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                 </div>
                                 <div class="mb-4">
                                     <label for="category" class="block text-sm font-medium text-gray-700">Статус</label>
@@ -69,9 +69,17 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="mb-4">
+                                <div class="mb-4"  style="max-height: 200px; overflow-y: auto;">
                                     <span class="block text-sm font-medium text-gray-700">Товары</span>
                                     <div class="p-2 rounded shadow-sm border-gray-100 border-2">
+                                        <ul>
+                                               <li v-for="(item, index) in selectedOrder.goods" :key="index" class="flex justify-between py-2 border-b">
+                                                <div>
+                                                    <span class="font-medium">{{ item.title }}</span>
+                                                    <span class="text-gray-500 text-sm ml-2">{{ item.price }} ₽</span>
+                                                </div>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                             </div>
@@ -203,6 +211,7 @@ function openModal(order: Order_modal) {
 
 
 function closeModal() {
+    console.log(selectedOrder.value)
     selectedOrder.value = null;
 }
 
@@ -218,6 +227,7 @@ const saveNewOrder = () => {
                     timeout: 1000,
                 });
                 closeModal();
+                location.reload() 
             })
             .catch((error) => {
                 toast.add({
