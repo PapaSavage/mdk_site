@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const API = axios.create({
-    baseURL: 'http://127.0.0.1:9010/',
+    baseURL: 'https://mdk-api.onrender.com/',
     validateStatus(status) {
         return status >= 200 && status < 500
     }
