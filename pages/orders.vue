@@ -42,27 +42,31 @@
                             <div class="mt-3 sm:mt-0 sm:ml-6 sm:w-1/2">
                                 <div class="flex justify-between">
                                     <h3 class="text-sm mb-3 text-gray-700">Заказ №{{ selectedOrder.id }}</h3>
-                                    <p class="bg-red-100 text-xs w-max p-1 rounded mr-2 text-gray-700">
-                                        {{ selectedOrder.status }}
-                                    </p>
+
                                 </div>
                                 <div class="mb-4 ">
                                     <span class="block text-sm font-medium text-gray-700">Клиент:</span>
-                                    <span class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_name }}</span>
+                                    <span class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_name
+                                        }}</span>
                                 </div>
                                 <div class="mb-4">
                                     <span class="block text-sm font-medium text-gray-700">Номер</span>
-                                    <span class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_phone }}</span>
+                                    <span class="block text-sm font-medium text-gray-700">{{
+            selectedOrder.customer_phone
+        }}</span>
                                     <span class="block text-sm font-medium text-gray-700">Почта</span>
-                                    <span class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_email }}</span>
+                                    <span class="block text-sm font-medium text-gray-700">{{
+                selectedOrder.customer_email
+            }}</span>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="category"
-                                        class="block text-sm font-medium text-gray-700">Статус</label>
+                                    <label for="category" class="block text-sm font-medium text-gray-700">Статус</label>
                                     <select id="category" v-model="selectedOrder.status"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                         <option disabled value="">Select a status</option>
-                                        <option v-for="column in columns" :key="column.status" :value="column.status" :selected="column.status === selectedOrder.status">{{ column.title }}</option>
+                                        <option v-for="column in columns" :key="column.status" :value="column.status"
+                                            :selected="column.status === selectedOrder.status">{{ column.title }}
+                                        </option>
                                     </select>
                                 </div>
                                 <div class="mb-4">
@@ -127,7 +131,7 @@ interface Product {
 interface Order {
     count: number;
     results: {
-        id:  number;
+        id: number;
         customer_name: string;
         customer_phone: string;
         customer_email: string;
@@ -158,24 +162,24 @@ const orders = ref<Order>({
 });
 
 const loading = ref(true);
-API.get('products/')
-    .then(response => {
-        // Обработка успешного ответа
-        console.log(response.data);
-    })
-    .catch(error => {
-        // Обработка ошибки
-        console.error('Ошибка при выполнении запроса:', error);
-    });
+// API.get('products/')
+//     .then(response => {
+//         // Обработка успешного ответа
+//         console.log(response.data);
+//     })
+//     .catch(error => {
+//         // Обработка ошибки
+//         console.error('Ошибка при выполнении запроса:', error);
+//     });
 API.get('orders/')
-     .then(function (response: any) {
-         orders.value = response.data;
-         console.log(orders);
-         loading.value = false;
-     })
-     .catch(function (error: any) {
-         console.log(error);
-     });
+    .then(function (response: any) {
+        orders.value = response.data;
+        console.log(orders);
+        loading.value = false;
+    })
+    .catch(function (error: any) {
+        console.log(error);
+    });
 
 // API.get('products/')
 // .then(function (response: any) {
@@ -193,7 +197,7 @@ const getOrdersByStatus = (status: string) => {
 const selectedOrder = ref<Order_modal | null>(null);
 
 function openModal(order: Order_modal) {
-    selectedOrder.value = order;
+    selectedOrder.value = { ...order };
 }
 
 
@@ -208,23 +212,23 @@ const saveNewOrder = () => {
         const formData = new FormData();
         formData.append('status', selectedOrder.value.status);
         API.put(`orders/${selectedOrder.value.id}/`, formData)
-                .then((response) => {
-                    toast.add({
-                        title: "Изменения были сохранены.",
-                        timeout: 1000,
-                    });
-                    closeModal();
-                })
-                .catch((error) => {
-                    toast.add({
-                        title: "Произошла ошибка. Изменения не были сохранены.",
-                        timeout: 1000,
-                        color: "flamingo",
-                        ui: { background: "bg-white dark:bg-neutral-900" },
-                    });
-                    console.error('Error updating product:', error);
+            .then((response) => {
+                toast.add({
+                    title: "Изменения были сохранены.",
+                    timeout: 1000,
                 });
-            }
+                closeModal();
+            })
+            .catch((error) => {
+                toast.add({
+                    title: "Произошла ошибка. Изменения не были сохранены.",
+                    timeout: 1000,
+                    color: "flamingo",
+                    ui: { background: "bg-white dark:bg-neutral-900" },
+                });
+                console.error('Error updating product:', error);
+            });
+    }
 }
 const { logout } = actions();
 </script>
