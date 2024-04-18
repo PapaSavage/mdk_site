@@ -9,7 +9,7 @@
                     class="p-2 rounded shadow-sm border-gray-100 border-2">
                     <a href="" class="animate__animated animate__fadeIn" @click.prevent="openModal(order)">
                         <div class="flex justify-between">
-                            <h3 class="text-sm mb-3 text-gray-700">Заказ</h3>
+                            <h3 class="text-sm mb-3 text-gray-700">Заказ №{{ order.id }}</h3>
                             <p class="bg-red-100 text-xs w-max p-1 rounded mr-2 text-gray-700">
                                 {{ order.status }}
                             </p>
@@ -47,31 +47,37 @@
                                     </p>
                                 </div>
                                 <div class="mb-4 ">
-                                    <label for="title" class="block text-sm font-medium text-gray-700">Клиент:</label>
-                                    <label for="title"
-                                        class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_name }}</label>
+                                    <span class="block text-sm font-medium text-gray-700">Клиент:</span>
+                                    <span class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_name }}</span>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="slug" class="block text-sm font-medium text-gray-700">Номер</label>
-                                    <label for="slug"
-                                        class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_phone }}</label>
-                                    <label for="slug" class="block text-sm font-medium text-gray-700">Почта</label>
-                                    <label for="slug"
-                                        class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_email }}</label>
+                                    <span class="block text-sm font-medium text-gray-700">Номер</span>
+                                    <span class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_phone }}</span>
+                                    <span class="block text-sm font-medium text-gray-700">Почта</span>
+                                    <span class="block text-sm font-medium text-gray-700">{{ selectedOrder.customer_email }}</span>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="category" class="block text-sm font-medium text-gray-700">Товар</label>
+                                    <label for="category"
+                                        class="block text-sm font-medium text-gray-700">Статус</label>
+                                    <select id="category" v-model="selectedOrder.status"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
+                                        <option disabled value="">Select a status</option>
+                                        <option v-for="column in columns" :key="column.status" :value="column.status" :selected="column.status === selectedOrder.status">{{ column.title }}</option>
+                                    </select>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="price" class="block text-sm font-medium text-gray-700">Price</label>
-                                    <input type="number" id="price"
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm">
+                                    <span class="block text-sm font-medium text-gray-700">Товары</span>
+                                    <div class="p-2 rounded shadow-sm border-gray-100 border-2">
+                                    </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
                     <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex ">
+                        <button type="button" @click="saveNewOrder"
+                            class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-600 text-base font-medium text-white hover:bg-green-700 sm:ml-3 sm:w-auto sm:text-sm">
+                            Save
+                        </button>
                         <button type="button" @click="closeModal"
                             class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
                             Cancel
@@ -104,11 +110,12 @@ const columns = [
     { title: "Готово", status: "done" },
     { title: "Отменено", status: "cancelled" },
 ];
+const toast = useToast();
 
 interface Product {
     count: number;
     results: {
-        id: string;
+        id: number;
         title: string;
         slug: string;
         price: number;
@@ -120,7 +127,7 @@ interface Product {
 interface Order {
     count: number;
     results: {
-        id: string;
+        id:  number;
         customer_name: string;
         customer_phone: string;
         customer_email: string;
@@ -132,7 +139,7 @@ interface Order {
 
 interface Order_modal {
 
-    id: string;
+    id: number;
     customer_name: string;
     customer_phone: string;
     customer_email: string;
@@ -160,15 +167,15 @@ API.get('products/')
         // Обработка ошибки
         console.error('Ошибка при выполнении запроса:', error);
     });
-// API.get('orders/')
-//     .then(function (response: any) {
-//         orders.value = response.data;
-//         console.log(orders);
-//         loading.value = false;
-//     })
-//     .catch(function (error: any) {
-//         console.log(error);
-//     });
+API.get('orders/')
+     .then(function (response: any) {
+         orders.value = response.data;
+         console.log(orders);
+         loading.value = false;
+     })
+     .catch(function (error: any) {
+         console.log(error);
+     });
 
 // API.get('products/')
 // .then(function (response: any) {
@@ -187,7 +194,6 @@ const selectedOrder = ref<Order_modal | null>(null);
 
 function openModal(order: Order_modal) {
     selectedOrder.value = order;
-    filteredProducts.value = products.value.results.filter(product => selectedOrder.value?.products.includes(product.id));
 }
 
 
@@ -196,5 +202,29 @@ function closeModal() {
     selectedOrder.value = null;
 }
 
+
+const saveNewOrder = () => {
+    if (selectedOrder.value) {
+        const formData = new FormData();
+        formData.append('status', selectedOrder.value.status);
+        API.put(`orders/${selectedOrder.value.id}/`, formData)
+                .then((response) => {
+                    toast.add({
+                        title: "Изменения были сохранены.",
+                        timeout: 1000,
+                    });
+                    closeModal();
+                })
+                .catch((error) => {
+                    toast.add({
+                        title: "Произошла ошибка. Изменения не были сохранены.",
+                        timeout: 1000,
+                        color: "flamingo",
+                        ui: { background: "bg-white dark:bg-neutral-900" },
+                    });
+                    console.error('Error updating product:', error);
+                });
+            }
+}
 const { logout } = actions();
 </script>
