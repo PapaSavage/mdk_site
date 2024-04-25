@@ -46,8 +46,9 @@
                                 </div>
                                 <div class="mb-4">
                                     <label for="customer_name" class="block text-sm font-medium text-gray-700">Клиент:</label>
-                                    <input type="text" id="customer_name" v-model="selectedOrder.customer_name" disabled
-                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
+                                    <input type="text" id="customer_name" :value="selectedOrder.customer_surname + ' ' + selectedOrder.customer_name + ' ' + selectedOrder.customer_lastname"
+                                        class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out"
+                                        disabled>
                                 </div>
                                 <div class="mb-4">
                                     <label for="customer_phone" class="block text-sm font-medium text-gray-700">Номер</label>
@@ -141,7 +142,9 @@ interface Order {
     count: number;
     results: {
         id: number;
+        customer_surname: string;
         customer_name: string;
+        customer_lastname: string;
         customer_phone: string;
         customer_email: string;
         status: string;
@@ -153,7 +156,9 @@ interface Order {
 interface Order_modal {
 
     id: number;
+    customer_surname: string;
     customer_name: string;
+    customer_lastname: string;
     customer_phone: string;
     customer_email: string;
     status: string;
