@@ -73,10 +73,11 @@
                                     <span class="block text-sm font-medium text-gray-700">Товары</span>
                                     <div class="p-2 rounded shadow-sm border-gray-100 border-2">
                                         <ul>
-                                               <li v-for="(item, index) in selectedOrder.goods" :key="index" class="flex justify-between py-2 border-b">
+                                               <li v-for="(item, index) in selectedOrder.goods" :key="index" class="flex justify-between py-3 border-b">
                                                 <div>
                                                     <span class="font-medium">{{ item.title }}</span>
                                                     <span class="text-gray-500 text-sm ml-2">{{ item.price }} ₽</span>
+                                                    <span class="text-gray-500 text-sm ml-2">x{{ item.quantity }}</span>
                                                 </div>
                                             </li>
                                         </ul>
