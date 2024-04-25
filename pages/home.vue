@@ -17,7 +17,7 @@
     </div>
 </template>
 
-<style>
+<style scoped>
 .page-title {
     margin-bottom: 20px;
     text-align: center;
