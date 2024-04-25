@@ -27,8 +27,8 @@
                         class="group relative">
                         <a href="" class="animate__animated animate__fadeIn" @click.prevent="openModal(product)">
                             <div
-                                class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75">
-                                <img :src="'data:image/png;base64,' + product.images" class="" />
+                                class="aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 w-full">
+                                <img :src="'data:image/png;base64,' + product.images" />
                             </div>
                             <div class="mt-4 flex justify-between">
                                 <div>
