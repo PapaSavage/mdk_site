@@ -6,9 +6,10 @@
 
     <ClientOnly>
         <UButton :icon="isDark
-                ? 'i-heroicons-moon-20-solid'
-                : 'i-heroicons-sun-20-solid'
-            " color="gray" variant="ghost" aria-label="Theme" @click="isDark = !isDark" class="absolute top-0 right-0" />
+            ? 'i-heroicons-moon-20-solid'
+            : 'i-heroicons-sun-20-solid'
+            " color="gray" variant="ghost" aria-label="Theme" @click="isDark = !isDark"
+            class="absolute top-0 right-0" />
     </ClientOnly>
     <UNotifications />
 </template>

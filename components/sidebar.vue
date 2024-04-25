@@ -33,7 +33,7 @@
         </div>
     </USlideover>
     <UButton :icon="'i-heroicons-bars-3-16-solid'" color="gray" variant="ghost" aria-label="Theme"
-        @click="isOpen = true" class="absolute sm:hidden top-0 left-0" />
+        @click="isOpen = true" class="absolute z-50 sm:hidden top-0 left-0" />
 </template>
 <script setup lang="ts">
 import { ProviderId } from 'firebase/auth';
