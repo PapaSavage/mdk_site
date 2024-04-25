@@ -45,6 +45,10 @@ export const actions = () => {
                     email: email,
                     nickname: nickname,
                     bot_token: "",
+                    address: "",
+                    name_store: "",
+                    api_key: "",
+                    status: false,
                 };
                 const docRef = await setDoc(doc(db, 'users', email), dataObj)
                 await updateProfile(user, { displayName: nickname });

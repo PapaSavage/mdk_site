@@ -45,19 +45,25 @@
 
                                 </div>
                                 <div class="mb-4">
-                                    <label for="customer_name" class="block text-sm font-medium text-gray-700">Клиент:</label>
-                                    <input type="text" id="customer_name" :value="selectedOrder.customer_surname + ' ' + selectedOrder.customer_name + ' ' + selectedOrder.customer_lastname"
+                                    <label for="customer_name"
+                                        class="block text-sm font-medium text-gray-700">Клиент:</label>
+                                    <input type="text" id="customer_name"
+                                        :value="selectedOrder.customer_surname + ' ' + selectedOrder.customer_name + ' ' + selectedOrder.customer_lastname"
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out"
                                         disabled>
                                 </div>
                                 <div class="mb-4">
-                                    <label for="customer_phone" class="block text-sm font-medium text-gray-700">Номер</label>
-                                    <input type="text" id="customer_phone" v-model="selectedOrder.customer_phone" disabled
+                                    <label for="customer_phone"
+                                        class="block text-sm font-medium text-gray-700">Номер</label>
+                                    <input type="text" id="customer_phone" v-model="selectedOrder.customer_phone"
+                                        disabled
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                 </div>
                                 <div class="mb-4">
-                                    <label for="customer_email" class="block text-sm font-medium text-gray-700">Почта</label>
-                                    <input type="email" id="customer_email" v-model="selectedOrder.customer_email" disabled
+                                    <label for="customer_email"
+                                        class="block text-sm font-medium text-gray-700">Почта</label>
+                                    <input type="email" id="customer_email" v-model="selectedOrder.customer_email"
+                                        disabled
                                         class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition-all duration-300 ease-in-out">
                                 </div>
                                 <div class="mb-4">
@@ -70,11 +76,12 @@
                                         </option>
                                     </select>
                                 </div>
-                                <div class="mb-4"  style="max-height: 200px; overflow-y: auto;">
+                                <div class="mb-4" style="max-height: 200px; overflow-y: auto;">
                                     <span class="block text-sm font-medium text-gray-700">Товары</span>
                                     <div class="p-2 rounded shadow-sm border-gray-100 border-2">
                                         <ul>
-                                               <li v-for="(item, index) in selectedOrder.goods" :key="index" class="flex justify-between py-3 border-b">
+                                            <li v-for="(item, index) in selectedOrder.goods" :key="index"
+                                                class="flex justify-between py-3 border-b">
                                                 <div>
                                                     <span class="font-medium">{{ item.title }}</span>
                                                     <span class="text-gray-500 text-sm ml-2">{{ item.price }} ₽</span>
@@ -109,7 +116,6 @@
 import { API } from '~/plugins/axios.js';
 import { ref } from 'vue';
 // import draggable from 'vuedraggable';
-
 
 definePageMeta({
     layout: "admin",
@@ -233,7 +239,7 @@ const saveNewOrder = () => {
                     timeout: 1000,
                 });
                 closeModal();
-                location.reload() 
+                location.reload()
             })
             .catch((error) => {
                 toast.add({
