@@ -1,5 +1,8 @@
 <template>
-    <div class="kanban-board">
+    <div class="text-center text-3xl font-bold mx-auto" v-if="api == ''">
+        Дождитесь настройки сервера
+    </div>
+    <div v-else class="kanban-board">
         <div class="kanban-column" v-for="(column, index) in columns" :key="index">
             <h2 class="kanban-column-title">{{ column.title }}</h2>
             <div class="kanban-column-content">
@@ -113,8 +116,35 @@
 
 <script setup lang="ts">
 
-import { API } from '~/plugins/axios.js';
 import { ref } from 'vue';
+
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+import axios from 'axios'
+
+
+const db = useFirestore();
+const user = await getCurrentUser();
+
+const api = ref('');
+
+const get_api = async () => {
+    const docRef = doc(db, "users", user.email);
+    const docSnap = await getDoc(docRef);
+
+    api.value = docSnap.data()?.api_key;
+    console.log(api.value);
+
+}
+
+await get_api();
+
+const API = axios.create({
+    baseURL: api.value,
+    validateStatus(status) {
+        return status >= 200 && status < 500
+    }
+})
+
 // import draggable from 'vuedraggable';
 
 definePageMeta({

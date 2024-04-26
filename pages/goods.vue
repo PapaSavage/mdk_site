@@ -4,51 +4,55 @@
             <div class="animate-spin rounded-full h-32 w-32 border-b-2 border-gray-900"></div>
         </div>
         <div v-else class="">
-            <div class="flex flex-wrap">
-                <button v-if="categories.count > 0" v-for="category in categories.results" :key="category.id"
-                    @click="selectedCategory = category.id"
-                    class="text-center bg-transparent hover:bg-pale-sky-400 my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-neutral-800 rounded-lg animate__animated hovanimate__swing ml-3 mb-3"
-                    :class="{ 'bg-neutral-300 dark:bg-pale-sky-600': category.id === selectedCategory }">
-                    {{ category.title }}
-                </button>
-                <button @click="openAddCategoryModal"
-                    class="text-center bg-mountain-500 hover:bg-mountain-700 text-white my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 dark:border-neutral-400 hover:dark:bg-mountain-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-mountain-400 active:bg-mountain-300">
-                    Добавить категорию
-                </button>
-                <button @click="openDeleteCategoryModal"
-                    class="text-center bg-flamingo-500 hover:bg-flamingo-700 text-white my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 dark:border-neutral-400 hover:dark:bg-flamingo-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-flamingo-400 active:bg-flamingo-300">
-                    X
-                </button>
-
+            <div v-if="api == ''" class=" text-center text-3xl font-bold ">Дождитесь настройки сервера
             </div>
-            <ul>
-                <div class=" mt-6 grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
-                    <div v-if="filteredProducts.length !== 0" v-for="product in filteredProducts" :key="product.id"
-                        class="group relative">
-                        <a href="" class="animate__animated animate__fadeIn" @click.prevent="openModal(product)">
-                            <div
-                                class="aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 w-full">
-                                <img :src="'data:image/png;base64,' + product.images" />
-                            </div>
-                            <div class="mt-4 flex justify-between">
-                                <div>
-                                    <h3 class="text-md font-bold ">
-                                        <span aria-hidden="true" class="absolute inset-0" />
-                                        {{ product.title }}
-                                    </h3>
-                                </div>
-                                <p class="text-md font-medium">${{ product.price }}</p>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="animate__animated animate__fadeIn" v-else>Нет данных</div>
+            <div v-else>
+                <div class="flex flex-wrap">
+                    <button v-if="categories.count > 0" v-for="category in categories.results" :key="category.id"
+                        @click="selectedCategory = category.id"
+                        class="text-center bg-transparent hover:bg-pale-sky-400 my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 border-2 border-pale-sky-900 dark:border-neutral-400 hover:dark:bg-neutral-800 rounded-lg animate__animated hovanimate__swing ml-3 mb-3"
+                        :class="{ 'bg-neutral-300 dark:bg-pale-sky-600': category.id === selectedCategory }">
+                        {{ category.title }}
+                    </button>
+                    <button @click="openAddCategoryModal"
+                        class="text-center bg-mountain-500 hover:bg-mountain-700 text-white my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 dark:border-neutral-400 hover:dark:bg-mountain-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-mountain-400 active:bg-mountain-300">
+                        Добавить категорию
+                    </button>
+                    <button @click="openDeleteCategoryModal"
+                        class="text-center bg-flamingo-500 hover:bg-flamingo-700 text-white my-auto shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold p-1 dark:border-neutral-400 hover:dark:bg-flamingo-700 rounded-lg animate__animated hovanimate__swing ml-3 mb-3 px-3 dark:active:bg-flamingo-400 active:bg-flamingo-300">
+                        X
+                    </button>
+
                 </div>
-            </ul>
-            <div class="fixed bottom-4 right-4">
-                <button @click="openAddProductModal"
-                    class=" text-white active:bg-pale-sky-900 hover:bg-pale-sky-800 bg-pale-sky-900 shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold border-2 border-pale-sky-900 dark:border-neutral-100 hover:dark:bg-neutral-200 dark:bg-neutral-50 dark:text-black active:dark:bg-neutral-50 rounded-lg px-4 py-1 animate__animated animate__fadeIn">
-                    Добавить товар
-                </button>
+                <ul>
+                    <div class=" mt-6 grid grid-cols-2 gap-x-6 gap-y-6 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6">
+                        <div v-if="filteredProducts.length !== 0" v-for="product in filteredProducts" :key="product.id"
+                            class="group relative">
+                            <a href="" class="animate__animated animate__fadeIn" @click.prevent="openModal(product)">
+                                <div
+                                    class="aspect-h-1 aspect-w-1 overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 w-full">
+                                    <img :src="'data:image/png;base64,' + product.images" />
+                                </div>
+                                <div class="mt-4 flex justify-between">
+                                    <div>
+                                        <h3 class="text-md font-bold ">
+                                            <span aria-hidden="true" class="absolute inset-0" />
+                                            {{ product.title }}
+                                        </h3>
+                                    </div>
+                                    <p class="text-md font-medium">${{ product.price }}</p>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="animate__animated animate__fadeIn" v-else>Нет данных</div>
+                    </div>
+                </ul>
+                <div class="fixed bottom-4 right-4">
+                    <button @click="openAddProductModal"
+                        class=" text-white active:bg-pale-sky-900 hover:bg-pale-sky-800 bg-pale-sky-900 shadow-lg dark:shadow-neutral-700/50 text-black-700 font-semibold border-2 border-pale-sky-900 dark:border-neutral-100 hover:dark:bg-neutral-200 dark:bg-neutral-50 dark:text-black active:dark:bg-neutral-50 rounded-lg px-4 py-1 animate__animated animate__fadeIn">
+                        Добавить товар
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -260,9 +264,37 @@
 </template>
 
 <script setup lang="ts">
-import { API } from '~/plugins/axios.js';
-import { ref } from 'vue';
+// import { API } from '~/plugins/axios.js';
 
+import { ref } from 'vue';
+import { doc, updateDoc, getDoc } from "firebase/firestore";
+import axios from 'axios'
+
+
+const db = useFirestore();
+const user = await getCurrentUser();
+
+const api = ref('');
+
+const get_api = async () => {
+    const docRef = doc(db, "users", user.email);
+    const docSnap = await getDoc(docRef);
+
+    api.value = docSnap.data()?.api_key;
+    console.log(api.value);
+
+}
+
+await get_api();
+
+const API = axios.create({
+    baseURL: api.value,
+    validateStatus(status) {
+        return status >= 200 && status < 500
+    }
+})
+
+get_data();
 
 definePageMeta({
     layout: "admin",
