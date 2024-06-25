@@ -1,3 +1,11 @@
+# Site-Preview
+![screenshot](readmeimg/login.png)
+![screenshot](readmeimg/registration.png.png)
+![screenshot](readmeimg/order.png)
+![screenshot](readmeimg/productmodal.png)
+![screenshot](readmeimg/goods.png)
+
+
 # Nuxt 3 Minimal Starter
 
 Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
